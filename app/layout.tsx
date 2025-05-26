@@ -11,7 +11,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "toctok",
+  title: "ecommerce",
   description: "",
 };
 
@@ -25,7 +25,7 @@ export default async function RootLayout({
     
     <SessionProvider session={session}>
       
-      <html lang="en">
+      <html lang="en" className="dark" style={{ colorScheme: 'dark' }}>
         <body className={inter.className}>
           <NextTopLoader
             color="#22c55e"
