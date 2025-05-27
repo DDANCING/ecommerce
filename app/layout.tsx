@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SessionProvider } from "next-auth/react";
@@ -8,7 +8,7 @@ import { Toaster } from "@/components/ui/sonner";
 import NextTopLoader from 'nextjs-toploader';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
-const inter = Inter({ subsets: ["latin"] });
+const montserrat = Montserrat({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "ecommerce",
@@ -26,9 +26,9 @@ export default async function RootLayout({
     <SessionProvider session={session}>
       
       <html lang="en" className="dark" style={{ colorScheme: 'dark' }}>
-        <body className={inter.className}>
+        <body className={montserrat.className}>
           <NextTopLoader
-            color="#22c55e"
+            color="#fafafa"
             initialPosition={0.08}
             crawlSpeed={200}
             height={3}

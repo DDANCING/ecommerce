@@ -37,7 +37,7 @@
         "@tailwindcss/cli": "^4.1.7",
         "@tailwindcss/upgrade": "^4.1.7",
         "@types/debounce": "^1.2.4",
-        "@vercel/speed-insights": "^1.1.0",
+        "@vercel/speed-insights": "^1.2.0",
         "appwrite": "^16.0.2",
         "bcrypt": "^5.1.1",
         "bcryptjs": "^2.4.3",
