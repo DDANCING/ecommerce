@@ -10,6 +10,7 @@ import {
 import { Header } from "@/components/auth/header";
 import { Social } from "@/components/auth/social";
 import { BackButton } from "@/components/auth/back-button";
+import { Separator } from "../ui/separator";
 
 
 interface CardWrapperProps {
@@ -35,6 +36,7 @@ export const CardWrapper = ({
   <CardContent >
 {children}
 </CardContent>
+<Separator withText text="ou"/>
 {showSocial && (
 <CardFooter>
   <Social />
