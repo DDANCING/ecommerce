@@ -8,6 +8,7 @@ import NextTopLoader from 'nextjs-toploader';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
+import { ModalProvider } from "@/providers/modal-provider";
 
 
 const montserrat = Montserrat({ subsets: ["latin"] });
@@ -45,6 +46,7 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <ModalProvider/>
             {children}
          <SpeedInsights />
             <Toaster />

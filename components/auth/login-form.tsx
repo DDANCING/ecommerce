@@ -73,8 +73,8 @@ export const LoginForm = ()  => {
 
   return(
     <CardWrapper
-    headerLabel="Welcome back"
-    backButtonLabel={showTwoFactor ? "" : "Dont have an account?"} 
+    headerLabel="Bem vindo!"
+    backButtonLabel={showTwoFactor ? "" : "Não tem uma conta?"} 
     backButtonHref="/auth/register"
     showSocial 
     >
@@ -128,7 +128,7 @@ export const LoginForm = ()  => {
             name="password"
             render={({ field }) => (
               <FormItem className="w-72">
-                <FormLabel>password</FormLabel>
+                <FormLabel>senha</FormLabel>
                 <FormControl>
                   <Input
                   disabled={isPending}
@@ -144,7 +144,7 @@ export const LoginForm = ()  => {
                 className="px-0 font-normal"
                 >
                     <Link href="/auth/reset">
-                       Forgot password?
+                       Esqueceu a senha?
                     </Link>
                   </Button>
                 <FormMessage/>
@@ -162,7 +162,7 @@ export const LoginForm = ()  => {
           variant={ "outline"}
           className="w-72 "
           >  
-          {showTwoFactor ? "Confirm" : "Login"}  
+          {showTwoFactor ? "Confirmar" : "Entrar"}  
           </Button>
         </form>
       </Form>
