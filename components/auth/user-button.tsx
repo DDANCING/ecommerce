@@ -3,7 +3,7 @@
 
 import { User } from "lucide-react";
 import { CiLogout } from "react-icons/ci";
-import { BiUser } from "react-icons/bi";
+
 import { CiSettings } from "react-icons/ci";
 import { logout } from "@/actions/logout";
 import {
@@ -25,7 +25,6 @@ import { useCurrentUser } from "@/data/hooks/use-current-user";
 
 export const ProfileOptions = () => {
   const user = useCurrentUser();
-  const userId = user?.id;
   const onClick = () => {
     logout();
   };
@@ -33,7 +32,7 @@ export const ProfileOptions = () => {
 
   return (
     <DropdownMenu>
-  <div className="flex gap-4 ">
+  <div className="flex gap-4">
 
   <DropdownMenuTrigger className="rounded-full"> 
  
@@ -48,13 +47,9 @@ export const ProfileOptions = () => {
     </DropdownMenuTrigger>
     </div>
   <DropdownMenuContent className="box-content mx-6">
-  <DropdownMenuItem>
-          
-  <BiUser /> <a href={`/profile/${userId}`}> Profile </a>
-         
-             </DropdownMenuItem>
+
     
-             <DropdownMenuSeparator />
+            
            <DropdownMenuItem>
           
            <CiSettings />

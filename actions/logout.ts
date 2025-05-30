@@ -5,5 +5,5 @@ import { revalidatePath } from "next/cache";
 
 export const logout = async () => {
   await signOut();
-  revalidatePath("/");
+  revalidatePath("/login");
 };
