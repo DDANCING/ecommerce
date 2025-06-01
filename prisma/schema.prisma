@@ -19,6 +19,7 @@ model User {
   bio                   String?
   accounts              Account[]
   twoFactorConfirmation TwoFactorConfirmation?
+  stores                Store[]
 }
 
 model Account {
@@ -70,6 +71,15 @@ model TwoFactorConfirmation {
   id     String @id @default(cuid())
   userId String @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Store {
+  id        String   @id @default(uuid())
+  name      String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum UserRole {

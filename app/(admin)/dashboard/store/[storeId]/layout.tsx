@@ -1,0 +1,37 @@
+import { auth } from "@/auth";
+import { db } from "@/lib/db";
+import { redirect } from "next/navigation";
+import React from "react";
+
+interface DashboardType {
+    children: React.ReactNode;
+    params: Promise<{ storeId: string }>
+}
+
+export default async function Dashboard({children, params}: DashboardType) {
+    const user = await auth();
+    const userId = user?.user.id;
+    const { storeId } = await params;
+
+    if (!userId) {
+        redirect('/auth/login')
+    }
+
+    const store = await db.store.findFirst({
+        where: {
+            id: storeId,
+            userId
+        }
+    })
+
+    if (!store) {
+        redirect('/dashboard');
+    }
+
+    return (
+        <>
+            aqui
+            {children}
+        </>
+    )
+}

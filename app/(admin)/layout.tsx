@@ -1,29 +1,36 @@
-
 import { auth } from "@/auth";
-import { SessionProvider } from "next-auth/react";
+import { db } from "@/lib/db";
+import { redirect } from "next/navigation";
+import React from 'react';
 
-interface Props {
+interface LayoutComponentProps {
   children: React.ReactNode;
 }
 
+export default async function DashboardLayout({
+  children,
+}: LayoutComponentProps) { 
+  const user = await auth();
+  const userId = user?.user.id;
 
-const Layout = async ({ children }: Props) => {
-  const session = await auth()
-  const userId = session?.user.id;
-  
+  if (!userId) {
+    redirect("/auth/login");
+  }
+
+
+    const store = await db.store?.findFirst({
+        where: {
+            userId
+        }
+    })
+
+    if (!store) {
+        redirect(`/newstore`);
+    }
+
   return (
-    <SessionProvider session={session}>
-    <div className="flex flex-col min-h-screen">
-
-      <div className="flex-1 bg-foreground/2">
-    
+    <>
       {children}
-  
-      </div>
-  
-    </div>
-    </SessionProvider>
-  )
+    </>
+  );
 }
-
-export default Layout;

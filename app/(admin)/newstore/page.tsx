@@ -14,7 +14,7 @@ const AdminPage = () => {
     }, [isOpen, onOpen ])
   return (
     <div className="flex  m-20">
-    
+  
     </div>
   );
 }
