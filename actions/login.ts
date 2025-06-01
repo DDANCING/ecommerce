@@ -18,6 +18,7 @@ import {
 import { error } from "console";
 import { db } from "@/lib/db";
 import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
+import { toast } from "sonner";
 
 
 export const login = async (
@@ -112,9 +113,10 @@ export const login = async (
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
-          return { error: "Invalid credentials!" }
+          return { error: "Invalid credentials!",  }
+          
         default:
-          return { error: "Something went wrong!" }
+          return { }
       }
     }
 

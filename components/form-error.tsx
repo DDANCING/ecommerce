@@ -1,4 +1,7 @@
+
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
+import Link from "next/link";
+import { Button } from "./ui/button";
 
 
 interface FormErrorProps {
@@ -11,10 +14,17 @@ export const FormError = ({
   if (!message) return null;
 
   return(
-    <div className="bg-destructive/15 p-3 rounded-md flex items-center gap-x-2 text-sm text-destructive">
-      <ExclamationTriangleIcon className="h-4 w-4"/>
+    <div>
+    <div className=" p-3 rounded-lg flex flex-col items-center gap-x-2 text-md text-destructive">
+      <ExclamationTriangleIcon className="h-20 w-20"/>
     <p>{message}</p>
-
+   
+    </div>
+     <Link href="/">
+     <Button className="bg-muted-foreground rounded-full">
+    Retornar para tela inicial
+    </Button>
+    </Link>
     </div>
   )
 }

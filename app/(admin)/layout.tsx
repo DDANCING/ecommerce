@@ -1,5 +1,7 @@
 import { auth } from "@/auth";
+import { RoleGate } from "@/components/auth/role-gate";
 import { db } from "@/lib/db";
+import { UserRole } from "@prisma/client";
 import { redirect } from "next/navigation";
 import React from 'react';
 
@@ -30,7 +32,9 @@ export default async function DashboardLayout({
 
   return (
     <>
+    <RoleGate allowedRole={UserRole.ADMIN} >
       {children}
+      </RoleGate>
     </>
   );
 }
