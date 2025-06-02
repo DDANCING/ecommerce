@@ -1,13 +1,11 @@
-
 import { db } from "@/lib/db";
 
 interface DashboardStorePageProps {
-  params: { storeId: string };
+  params: Promise<{ storeId: string }>
 }
 
 const DashboardStorePage = async ({ params }: DashboardStorePageProps) => {
-  
-  const { storeId } = await Promise.resolve(params);
+  const { storeId } = await params;
 
   const store = await db.store.findFirst({
     where: {
