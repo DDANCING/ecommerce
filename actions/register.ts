@@ -22,7 +22,6 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
   const existingUser = await getUserByEmail(email);
 
   if (existingUser) {
-    // DO NOT use toast.error here. It's a server component.
     return { error: "Email already in use!" }
   }
 

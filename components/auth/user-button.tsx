@@ -32,9 +32,9 @@ export const ProfileOptions = () => {
 
   return (
     <DropdownMenu>
-  <div className="flex gap-4">
+  <div className="flex items-center">
 
-  <DropdownMenuTrigger className="rounded-full"> 
+  <DropdownMenuTrigger className="rounded-full h-10"> 
  
     <Avatar className="w-10 h-10 hover:border-2 hover:border-primary" >
     <AvatarImage src={user?.image || ""}/>

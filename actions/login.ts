@@ -15,10 +15,9 @@ import {
   generateTwoFactorToken,
   generateVerificationToken 
 } from "@/lib/tokens";
-import { error } from "console";
 import { db } from "@/lib/db";
 import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
-import { toast } from "sonner";
+
 
 
 export const login = async (

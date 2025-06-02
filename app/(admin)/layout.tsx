@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { UserRole } from "@prisma/client";
 import { redirect } from "next/navigation";
 import React from 'react';
+import NavBar from "@/app/(admin)/_components/admin-navbar";
 
 interface LayoutComponentProps {
   children: React.ReactNode;
@@ -33,8 +34,9 @@ export default async function DashboardLayout({
   return (
     <>
     <RoleGate allowedRole={UserRole.ADMIN} >
+      <NavBar/>
       {children}
-      </RoleGate>
+    </RoleGate>
     </>
   );
 }

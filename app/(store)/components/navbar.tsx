@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { NavbarSidebar } from "./navbar-sidebar";
 import { ProfileOptions } from "@/components/auth/user-button";
+import { DashboardIcon } from "@radix-ui/react-icons";
 
 
 interface NavbarItemProps {
@@ -62,7 +63,7 @@ export const Navbar = ({ user }: UserProps) => {
   return (
    <nav className="h-20 flex border-b justify-between font-medium bg-background">
         <Link href="/" className="pl-6 flex items-center">
-            <span className="text-5xl font-semibold m-6">
+            <span className="text-5xl font-semibold">
             Logo
             </span>
         </Link>
@@ -80,7 +81,12 @@ export const Navbar = ({ user }: UserProps) => {
         </div>
         <div className="hidden lg:flex">
            {user? (
-            <div className="flex px-[vw]">
+            <div className="flex mx-8 items-center gap-4">
+                <Link href="/dashboard">
+                <Button variant="outline">
+                <DashboardIcon/>
+                </Button>
+                </Link>
                 <ProfileOptions/>
             </div>
            ):(
