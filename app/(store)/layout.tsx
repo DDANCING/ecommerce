@@ -1,6 +1,6 @@
 
-import { Navbar } from "./components/navbar";
-import { Footer } from "./components/footer";
+import { Navbar } from "./_components/navbar";
+import { Footer } from "./_components/footer";
 import { auth } from "@/auth";
 import { SessionProvider } from "next-auth/react";
 

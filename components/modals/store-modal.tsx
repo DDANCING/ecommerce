@@ -9,6 +9,9 @@ import { Modal } from "@/components/modal"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { useState } from "react";
+import axios from "axios";
 
 
 const formSchema = z.object({
@@ -17,6 +20,7 @@ const formSchema = z.object({
 
 export const StoreModal = () => {
     const StoreModal = useStoreModal(); 
+    const [loading, setLoading] = useState(false);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -26,8 +30,23 @@ export const StoreModal = () => {
     });
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        console.log(values);
-        //TODO: create store
+        try {
+            setLoading(true);
+
+            const response = await axios .post('api/stores', values);
+
+            window.location.assign(`dashboard/store/${response.data.id}`)
+        } catch {
+        toast("Algo deu errado!", {
+          description: "Por favor aguarde e tente novamente mais tarde",
+          action: {
+            label: "Fechar",
+            onClick: () => console.log("Undo"),
+          },
+        })
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (

@@ -20,21 +20,25 @@ import {
   } from "@/components/ui/avatar";
 
 import { useCurrentUser } from "@/data/hooks/use-current-user";
+import { useSettingsModal } from "@/hooks/use-settings-modal";
+import { CommandItem } from "../ui/command";
+import { useState } from "react";
 
 
 
 export const ProfileOptions = () => {
+  const settings = useSettingsModal();
   const user = useCurrentUser();
   const onClick = () => {
     logout();
   };
  
-
+const [open, setOpen] = useState(false)
   return (
     <DropdownMenu>
-  <div className="flex gap-4">
+  <div className="flex items-center">
 
-  <DropdownMenuTrigger className="rounded-full"> 
+  <DropdownMenuTrigger className="rounded-full h-10"> 
  
     <Avatar className="w-10 h-10 hover:border-2 hover:border-primary" >
     <AvatarImage src={user?.image || ""}/>
@@ -49,18 +53,20 @@ export const ProfileOptions = () => {
   <DropdownMenuContent className="box-content mx-6">
 
     
-            
+         
            <DropdownMenuItem>
+          <button  className="flex jus" type="submit" onClick={() => {settings.onOpen()}}>
+          <CiSettings className="mr-2"/>
+          Configurações
+          </button>
           
-           <CiSettings />
-           <a href="/settings"> Settings </a>
         
             </DropdownMenuItem>
             
             <DropdownMenuSeparator />
             <DropdownMenuItem>
             <button className="flex " type="submit" onClick={onClick} >
-            <CiLogout className="mr-2"/> Log out 
+            <CiLogout className="mr-2"/> Sair
             </button>
             
         </DropdownMenuItem>

@@ -47,7 +47,7 @@ export const NewVerificationForm = () => {
         <div className="flex items-center w-full justify-center">
           {!success && !error && <ScaleLoader color="#6D28D9" />}
           <FormSuccess message={success} />
-          {!success && <FormError message={error} />}
+          {!success}
         </div>
       </CardWrapper>
     </div>
