@@ -5,6 +5,7 @@ import { UserRole } from "@prisma/client";
 import { redirect } from "next/navigation";
 import React from 'react';
 import NavBar from "@/app/(admin)/_components/admin-navbar";
+import { ModalProvider } from "@/providers/modal-provider";
 
 interface LayoutComponentProps {
   children: React.ReactNode;
@@ -35,6 +36,7 @@ export default async function DashboardLayout({
     <>
     <RoleGate allowedRole={UserRole.ADMIN} >
       <NavBar/>
+      <ModalProvider/>
       {children}
     </RoleGate>
     </>

@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
+import { ModalProvider } from "@/providers/modal-provider";
 import { redirect } from "next/navigation";
 import React from "react";
 
@@ -30,7 +31,7 @@ export default async function Dashboard({children, params}: DashboardType) {
 
     return (
         <>
-            aqui
+        <ModalProvider/>
             {children}
         </>
     )

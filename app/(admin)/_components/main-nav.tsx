@@ -11,23 +11,20 @@ import { cn } from "@/lib/utils"
 import { useParams, usePathname } from "next/navigation"
 import Link from "next/link"
 
-export function MainNav({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLElement>) {
-  const pathname = usePathname();
-  const params = useParams();
+export function MainNav({ className, ...props } : React.HTMLAttributes<HTMLElement>) {
+    const pathname = usePathname();
+    const params = useParams();
 
   const routes = [
     {
-      href: `/${params.storeId}/settings`,
+      href: `/dashboard/store/${params.storeId}/settings`,
       label: "Settings",
-      active: pathname === `/${params.storeId}/settings`
+      active: pathname === `/dashboard/store/${params.storeId}/settings`
     },
     {
-      href: `/${params.storeId}/billing`,
+      href: `/dashboard/store/${params.storeId}/billing`,
       label: "Billing",
-      active: pathname === `/${params.storeId}/billing`
+      active: pathname === `/dashboard/store/${params.storeId}/billing`
     }
   ];
 
