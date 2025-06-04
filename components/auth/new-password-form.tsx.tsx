@@ -23,6 +23,7 @@ import { CardWrapper } from "@/components/auth/card-wrapper";
 
 import { FormSuccess } from "@/components/form-sucess";
 import { newPassword } from "@/actions/new-password";
+import { toast } from "sonner";
 
 
 export const NewPasswordForm = ()  => {
@@ -41,20 +42,47 @@ export const NewPasswordForm = ()  => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof NewPasswordSchema>) => {
-   setError("");
-   setSuccess("");
+ const onSubmit = (values: z.infer<typeof NewPasswordSchema>) => {
+  setError("");
+  setSuccess("");
 
-    
-
-    startTransition(() => {
+  startTransition(() => {
     newPassword(values, token)
-     .then((data) => {
-      setError(data?.error);
-      setSuccess(data?.success);
-     })
-    });
-  };
+      .then((data) => {
+        if (data?.error) {
+          setError(data.error);
+          toast.error("Erro ao atualizar senha", {
+            description: data.error,
+            action: {
+              label: "Fechar",
+              onClick: () => console.log("Toast fechado"),
+            },
+          });
+        }
+
+        if (data?.success) {
+          setSuccess(data.success);
+          toast.success("Senha redefinida com sucesso!", {
+            description: "Você já pode fazer login com a nova senha.",
+            action: {
+              label: "Fechar",
+              onClick: () => console.log("Toast fechado"),
+            },
+          });
+        }
+      })
+      .catch(() => {
+        setError("Algo deu errado. Tente novamente.");
+        toast.error("Erro inesperado", {
+          description: "Tente novamente mais tarde.",
+          action: {
+            label: "Fechar",
+            onClick: () => console.log("Toast fechado"),
+          },
+        });
+      });
+  });
+};
 
   return(
     <CardWrapper

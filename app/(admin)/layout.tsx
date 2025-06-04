@@ -28,13 +28,17 @@ export default async function DashboardLayout({
         }
     })
 
+    if (user.user.role === "USER") {
+       redirect(`/`)
+    }
+
     if (!store) {
         redirect(`/newstore`);
     }
 
   return (
     <>
-    <RoleGate allowedRole={UserRole.ADMIN} >
+    <RoleGate allowedRoles={[UserRole.ADMIN, UserRole.SELLER]} >
       <NavBar/>
       <ModalProvider/>
       {children}

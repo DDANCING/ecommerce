@@ -3,7 +3,7 @@
 
 
 
-import { SettingsModal } from "@/components/settings";
+import { SettingsModal } from "@/components/modals/settings-modal";
 import { useEffect, useState } from "react";
 
 
