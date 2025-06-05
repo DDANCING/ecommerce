@@ -31,14 +31,14 @@ export function MainNav({ className, ...props }: React.HTMLAttributes<HTMLElemen
         active: pathname === `/dashboard/store/${params.storeId}/overview`
       },
       {
+        href: `/dashboard/store/${params.storeId}/billboards`,
+        label: "Billboards",
+        active: pathname === `/dashboard/store/${params.storeId}/billboards`
+      },
+      {
         href: `/dashboard/store/${params.storeId}/settings`,
         label: "Settings",
         active: pathname === `/dashboard/store/${params.storeId}/settings`
-      },
-      {
-        href: `/dashboard/store/${params.storeId}/billing`,
-        label: "Billing",
-        active: pathname === `/dashboard/store/${params.storeId}/billing`
       },
       
     ];

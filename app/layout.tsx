@@ -23,7 +23,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth()
+  const session = await auth();
 
   return (
   <SessionProvider session={session}>
@@ -38,7 +38,7 @@ export default async function RootLayout({
             showSpinner={false}
             easing="ease"
             speed={200}
-            shadow="0 0 10px #22c55e,0 0 5px #22c55e" />
+            shadow="0 0 10px #fafafa,0 0 5px #fafafa" />
          
           <ThemeProvider
             attribute="class"

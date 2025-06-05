@@ -21,7 +21,6 @@ export default async function DashboardLayout({
     redirect("/auth/login");
   }
 
-
     const store = await db.store?.findFirst({
         where: {
             userId
