@@ -84,7 +84,7 @@ export const Navbar = ({ user }: UserProps) => {
         <div className="hidden lg:flex">
            {user? (
             <div className="flex mx-8 items-center gap-4">
-                <RoleGateNoMessage allowedRoles={[UserRole.ADMIN, UserRole.SELLER]} >
+                <RoleGateNoMessage allowedRoles={[UserRole.ADMIN, UserRole.SELLER, UserRole.OWNER]} >
                 <Link href="/dashboard">
                 <Button variant="outline">
                 <DashboardIcon/>

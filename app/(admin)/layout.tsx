@@ -37,7 +37,7 @@ export default async function DashboardLayout({
 
   return (
     <>
-    <RoleGate allowedRoles={[UserRole.ADMIN, UserRole.SELLER]} >
+    <RoleGate allowedRoles={[UserRole.ADMIN, UserRole.SELLER, UserRole.OWNER]} >
       <NavBar/>
       <ModalProvider/>
       {children}

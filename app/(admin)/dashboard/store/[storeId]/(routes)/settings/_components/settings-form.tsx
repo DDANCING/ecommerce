@@ -1,5 +1,6 @@
 "use client";
 
+import { RoleGateNoMessage } from "@/components/auth/role-gate";
 import { AlertModal } from "@/components/modals/alert-modal";
 import { ApiAlert } from "@/components/ui/api-alert";
 import { Button } from "@/components/ui/button";
@@ -10,7 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import { userOrigin } from "@/hooks/use-origin";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Store } from "@prisma/client";
+import { Store, UserRole } from "@prisma/client";
 import axios from "axios";
 import { Trash } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
@@ -118,8 +119,10 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                 </Button>
             </form>
         </Form>
+        <RoleGateNoMessage allowedRoles={[UserRole.ADMIN]}>
         <Separator/>
-        <ApiAlert title="test" description={`${origin}/api/${params.storeId}`} variant="public"/>
+        <ApiAlert title="GET" description={`${origin}/api/${params.storeId}`} variant="public"/>
+        </RoleGateNoMessage>
         </>
     )
 }

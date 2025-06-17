@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Heading } from "@/components/ui/heading"
 import { Separator } from "@/components/ui/separator"
-import { BillboardColumn, columns } from "./columns"
+import { CategoriesColumn, columns } from "./columns"
 import { DataTable } from "@/components/ui/data-table"
 
 import { PlusIcon } from "lucide-react"
@@ -15,7 +15,7 @@ import { UserRole } from "@prisma/client"
 
 
 interface BillboardClientProps {
-  data: BillboardColumn[],
+  data: CategoriesColumn[],
 }
 
 export const BillboardClient: React.FC<BillboardClientProps> = ({ 
@@ -28,8 +28,8 @@ export const BillboardClient: React.FC<BillboardClientProps> = ({
     <>
     <div className="flex items-center justify-between">
       <Heading
-      title={`Outdoors (${data.length})`}
-      description="Gerencie outdoors para sua loja"
+      title={`Categorias (${data.length})`}
+      description="Gerencie categorias para sua loja"
       />
       <Button onClick={() => router.push(`/dashboard/store/${params.storeId}/billboards/new`)}>
         <PlusIcon className="mr-2 h-4 w-4"/>
@@ -37,7 +37,7 @@ export const BillboardClient: React.FC<BillboardClientProps> = ({
       </Button>
     </div>
     <Separator/>
-    <DataTable placeholder="Buscar por Banner..." searchKey="label" columns={columns} data={data}/>
+    <DataTable placeholder="Buscar por Categorias..." searchKey="label" columns={columns} data={data}/>
     <RoleGateNoMessage allowedRoles={[UserRole.ADMIN]}>
     <Heading
     title="API"

@@ -36,6 +36,7 @@
         "@radix-ui/react-tooltip": "^1.2.7",
         "@tailwindcss/cli": "^4.1.7",
         "@tailwindcss/upgrade": "^4.1.7",
+        "@tanstack/react-table": "^8.21.3",
         "@types/debounce": "^1.2.4",
         "@vercel/speed-insights": "^1.2.0",
         "appwrite": "^16.0.2",
@@ -440,6 +441,10 @@
     "@tailwindcss/postcss": ["@tailwindcss/postcss@4.1.8", "", { "dependencies": { "@alloc/quick-lru": "^5.2.0", "@tailwindcss/node": "4.1.8", "@tailwindcss/oxide": "4.1.8", "postcss": "^8.4.41", "tailwindcss": "4.1.8" } }, "sha512-vB/vlf7rIky+w94aWMw34bWW1ka6g6C3xIOdICKX2GC0VcLtL6fhlLiafF0DVIwa9V6EHz8kbWMkS2s2QvvNlw=="],
 
     "@tailwindcss/upgrade": ["@tailwindcss/upgrade@4.1.7", "", { "dependencies": { "@tailwindcss/node": "4.1.7", "@tailwindcss/oxide": "4.1.7", "braces": "^3.0.3", "dedent": "1.6.0", "enhanced-resolve": "^5.18.1", "globby": "^14.1.0", "jiti": "^2.0.0-beta.3", "mri": "^1.2.0", "picocolors": "^1.1.1", "postcss": "^8.4.41", "postcss-import": "^16.1.0", "postcss-selector-parser": "^7.1.0", "prettier": "3.5.0", "semver": "^7.7.1", "tailwindcss": "4.1.7", "tree-sitter": "^0.22.4", "tree-sitter-typescript": "^0.23.2" }, "bin": { "upgrade": "dist/index.mjs" } }, "sha512-/SRFsDQEWz3Q0Sh2rzXvAHjC4+Sexf/ELA2xwhO+jaXtCqNYpnzY2KxhFC1eXPDkghhPrNXM0BFssYR2S6eHuQ=="],
+
+    "@tanstack/react-table": ["@tanstack/react-table@8.21.3", "", { "dependencies": { "@tanstack/table-core": "8.21.3" }, "peerDependencies": { "react": ">=16.8", "react-dom": ">=16.8" } }, "sha512-5nNMTSETP4ykGegmVkhjcS8tTLW6Vl4axfEGQN3v0zdHYbK4UfoqfPChclTrJ4EoK9QynqAu9oUf8VEmrpZ5Ww=="],
+
+    "@tanstack/table-core": ["@tanstack/table-core@8.21.3", "", {}, "sha512-ldZXEhOBb8Is7xLs01fR3YEc3DERiz5silj8tnGkFZytt1abEvl/GhUmCE0PMLaMPTa3Jk4HbKmRlHmu+gCftg=="],
 
     "@tybys/wasm-util": ["@tybys/wasm-util@0.9.0", "", { "dependencies": { "tslib": "^2.4.0" } }, "sha512-6+7nlbMVX/PVDCwaIQ8nTOPveOcFLSt8GcXdx8hD0bt39uWxYT88uXzqTd4fTvqta7oeUJqudepapKNt2DYJFw=="],
 
