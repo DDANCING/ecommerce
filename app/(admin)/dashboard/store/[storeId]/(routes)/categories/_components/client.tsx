@@ -14,11 +14,11 @@ import { UserRole } from "@prisma/client"
 
 
 
-interface BillboardClientProps {
+interface CategoryClientProps {
   data: CategoriesColumn[],
 }
 
-export const BillboardClient: React.FC<BillboardClientProps> = ({ 
+export const CategoryClient: React.FC<CategoryClientProps> = ({ 
   data
 }) => {
   const router = useRouter();
@@ -31,22 +31,22 @@ export const BillboardClient: React.FC<BillboardClientProps> = ({
       title={`Categorias (${data.length})`}
       description="Gerencie categorias para sua loja"
       />
-      <Button onClick={() => router.push(`/dashboard/store/${params.storeId}/billboards/new`)}>
+      <Button onClick={() => router.push(`/dashboard/store/${params.storeId}/categories/new`)}>
         <PlusIcon className="mr-2 h-4 w-4"/>
-        Add new
+         Adicionar nova
       </Button>
     </div>
     <Separator/>
-    <DataTable placeholder="Buscar por Categorias..." searchKey="label" columns={columns} data={data}/>
+    <DataTable placeholder="Buscar por Categorias..." searchKey="name" columns={columns} data={data}/>
     <RoleGateNoMessage allowedRoles={[UserRole.ADMIN]}>
     <Heading
     title="API"
-    description="API calls for billboards"
+    description="API calls for categories"
     />
     <Separator />
     <ApiList 
-    entityName="billboards"
-    entityIdName="billboardId"
+    entityName="categories"
+    entityIdName="categoriesId"
     />
     </RoleGateNoMessage>
     </>

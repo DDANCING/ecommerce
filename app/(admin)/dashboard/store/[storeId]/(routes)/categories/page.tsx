@@ -2,7 +2,7 @@ import { format, formatRelative, differenceInDays } from "date-fns";
 import { ptBR, tr } from "date-fns/locale";
 
 import { db } from "@/lib/db"
-import { BillboardClient } from "./_components/client"
+import { CategoryClient } from "./_components/client"
 import { CategoriesColumn } from "./_components/columns";
 
 interface CategoriesPageProps {
@@ -42,7 +42,7 @@ const categoriesPage = async ({ params }: CategoriesPageProps) => {
   
     return {
       id: item.id,
-      label: item.name,
+      name: item.name,
       billboardLabel: item.billboard.label,
       createdAt: dataFormatada,
     };
@@ -51,7 +51,7 @@ const categoriesPage = async ({ params }: CategoriesPageProps) => {
     return ( 
         <div className="flex-col">
             <div className="flex-1 space-y-4 p-8 pt-6">
-                <BillboardClient data={formatedCategories} />
+                <CategoryClient data={formatedCategories} />
             </div>
         </div>
     )

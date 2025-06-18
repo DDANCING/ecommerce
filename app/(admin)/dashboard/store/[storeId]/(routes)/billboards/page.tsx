@@ -4,13 +4,13 @@ import { db } from "@/lib/db";
 import { BillboardClient } from "./_components/client";
 import { BillboardColumn } from "./_components/columns";
 
-// 1. Defina a interface com 'params' como uma Promise, igual ao seu exemplo que funciona
+
 interface BillboardsPageProps {
   params: Promise<{ storeId: string }>;
 }
 
 const BillboardsPage = async ({ params }: BillboardsPageProps) => {
-  // 2. Use 'await' para extrair o conteúdo dos params
+  
   const { storeId } = await params;
 
   const billboards = await db.billboard.findMany({

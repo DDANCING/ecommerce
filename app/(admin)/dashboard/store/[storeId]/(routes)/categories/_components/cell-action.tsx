@@ -31,11 +31,11 @@ export const CellAction: React.FC<CellActionProps> = ({
      const onDelete = async () => {
         try {
             setLoading(true)
-            await axios.delete(`/api/${params.storeId}/billboards/${data.id}`);
+            await axios.delete(`/api/${params.storeId}/categories/${data.id}`);
             router.refresh();
-            toast.success("Capa deletada.");
+            toast.success("Categoria deletada.");
         } catch (error) {
-            toast.error("certifique-se de que você removeu todas as categorias que usam essa capa primeiro.")
+            toast.error("certifique-se de que você removeu todos os produtos que usam essa capa primeiro.")
         } finally {
             setLoading(false)
             setOpen(false)
@@ -61,7 +61,7 @@ export const CellAction: React.FC<CellActionProps> = ({
                     Actions
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator/>
-                <DropdownMenuItem className="flex " onClick={() => router.push(`/dashboard/store/${params.storeId}/billboards/${data.id}`)} >
+                <DropdownMenuItem className="flex " onClick={() => router.push(`/dashboard/store/${params.storeId}/categories/${data.id}`)} >
                     <Edit className="mr-2 h-4 w-4"/>
                     Update
                 </DropdownMenuItem>
