@@ -15,8 +15,8 @@ export const FormError = ({
 
   return(
     <div>
-    <div className=" p-3 rounded-lg flex flex-col items-center gap-x-2 text-md text-destructive">
-      <ExclamationTriangleIcon className="h-20 w-20"/>
+    <div className=" p-3 rounded-lg flex flex-col items-center gap-x-2 text-md ">
+      <ExclamationTriangleIcon className="h-20 w-20 text-red-600"/>
     <p>{message}</p>
    
     </div>

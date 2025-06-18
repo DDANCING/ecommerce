@@ -21,16 +21,17 @@ import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
-import UrlTabs from "./urltabs";
-import { TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
+import UrlTabs from "../urltabs";
+
 import { SyncLoader } from "react-spinners";
-import { ModeToggle } from "./ui/mode-toggle";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
-import { Switch } from "./ui/switch";
+import { ModeToggle } from "../ui/mode-toggle";
+import { Switch } from "../ui/switch";
 import { cn } from "@/lib/utils";
-import { Modal } from "./modal";
+import { Modal } from "../modal";
 import { useSettingsModal } from "@/hooks/use-settings-modal";
+import { TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 
 export const SettingsModal = () => {
 const [error, setError] = useState<string | undefined>(); 

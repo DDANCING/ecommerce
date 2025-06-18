@@ -21,12 +21,15 @@ export default async function DashboardLayout({
     redirect("/auth/login");
   }
 
-
     const store = await db.store?.findFirst({
         where: {
             userId
         }
     })
+
+    if (user.user.role === "USER") {
+       redirect(`/`)
+    }
 
     if (!store) {
         redirect(`/newstore`);
@@ -34,7 +37,7 @@ export default async function DashboardLayout({
 
   return (
     <>
-    <RoleGate allowedRole={UserRole.ADMIN} >
+    <RoleGate allowedRoles={[UserRole.ADMIN, UserRole.SELLER, UserRole.OWNER]} >
       <NavBar/>
       <ModalProvider/>
       {children}

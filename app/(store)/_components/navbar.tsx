@@ -10,6 +10,8 @@ import { cn } from "@/lib/utils";
 import { NavbarSidebar } from "./navbar-sidebar";
 import { ProfileOptions } from "@/components/auth/user-button";
 import { DashboardIcon } from "@radix-ui/react-icons";
+import { RoleGateNoMessage } from "@/components/auth/role-gate";
+import { UserRole } from "@prisma/client";
 
 
 interface NavbarItemProps {
@@ -82,11 +84,14 @@ export const Navbar = ({ user }: UserProps) => {
         <div className="hidden lg:flex">
            {user? (
             <div className="flex mx-8 items-center gap-4">
+                <RoleGateNoMessage allowedRoles={[UserRole.ADMIN, UserRole.SELLER, UserRole.OWNER]} >
                 <Link href="/dashboard">
                 <Button variant="outline">
                 <DashboardIcon/>
+                <h1> Dashboard </h1>
                 </Button>
                 </Link>
+                </RoleGateNoMessage>
                 <ProfileOptions/>
             </div>
            ):(
