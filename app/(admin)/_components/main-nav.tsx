@@ -32,22 +32,27 @@ export function MainNav({ className, ...props }: React.HTMLAttributes<HTMLElemen
       },
       {
         href: `/dashboard/store/${params.storeId}/billboards`,
-        label: "Billboards",
+        label: "Outdoors",
         active: pathname === `/dashboard/store/${params.storeId}/billboards`
       },
       {
         href: `/dashboard/store/${params.storeId}/categories`,
-        label: "Categories",
+        label: "Categorias",
         active: pathname === `/dashboard/store/${params.storeId}/categories`
       },
       {
         href: `/dashboard/store/${params.storeId}/sizes`,
-        label: "Sizes",
+        label: "Tamanhos",
         active: pathname === `/dashboard/store/${params.storeId}/sizes`
       },
       {
+        href: `/dashboard/store/${params.storeId}/colors`,
+        label: "Cores",
+        active: pathname === `/dashboard/store/${params.storeId}/colors`
+      },
+      {
         href: `/dashboard/store/${params.storeId}/settings`,
-        label: "Settings",
+        label: "Configurações",
         active: pathname === `/dashboard/store/${params.storeId}/settings`
       },
       
