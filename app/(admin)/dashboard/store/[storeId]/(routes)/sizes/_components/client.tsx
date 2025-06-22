@@ -33,7 +33,7 @@ export const SizesClient: React.FC<SizesClientProps> = ({
       />
       <Button onClick={() => router.push(`/dashboard/store/${params.storeId}/sizes/new`)}>
         <PlusIcon className="mr-2 h-4 w-4"/>
-        Novo
+        Novo tamanho
       </Button>
     </div>
     <Separator/>

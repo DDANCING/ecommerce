@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Heading } from "@/components/ui/heading"
 import { Separator } from "@/components/ui/separator"
-import { ColorColumn, columns } from "./columns"
+import { ProductColumn, columns } from "./columns"
 import { DataTable } from "@/components/ui/data-table"
 
 import { PlusIcon } from "lucide-react"
@@ -14,12 +14,11 @@ import { UserRole } from "@prisma/client"
 
 
 
-interface ColorsClientProps {
-  data: ColorColumn[],
+interface ProductClientProps {
+  data: ProductColumn[],
 }
 
-export const 
-ColorsClient: React.FC<ColorsClientProps> = ({ 
+export const ProductClient: React.FC<ProductClientProps> = ({ 
   data
 }) => {
   const router = useRouter();
@@ -29,25 +28,25 @@ ColorsClient: React.FC<ColorsClientProps> = ({
     <>
     <div className="flex items-center justify-between">
       <Heading
-      title={`Cores (${data.length})`}
-      description="Gerencie cores para seus produtos"
+      title={`Produtos (${data.length})`}
+      description="Gerencie produtos da sua loja"
       />
-      <Button onClick={() => router.push(`/dashboard/store/${params.storeId}/colors/new`)}>
+      <Button onClick={() => router.push(`/dashboard/store/${params.storeId}/products/new`)}>
         <PlusIcon className="mr-2 h-4 w-4"/>
-        Nova cor
+        Novo outdoor
       </Button>
     </div>
     <Separator/>
-    <DataTable placeholder="Buscar por Cores..." searchKey="name" columns={columns} data={data}/>
+    <DataTable placeholder="Buscar por produtos..." searchKey="name" columns={columns} data={data}/>
     <RoleGateNoMessage allowedRoles={[UserRole.ADMIN]}>
     <Heading
     title="API"
-    description="API calls for Colors"
+    description="API calls for products"
     />
     <Separator />
     <ApiList 
-    entityName="colors"
-    entityIdName="colorId"
+    entityName="products"
+    entityIdName="productId"
     />
     </RoleGateNoMessage>
     </>

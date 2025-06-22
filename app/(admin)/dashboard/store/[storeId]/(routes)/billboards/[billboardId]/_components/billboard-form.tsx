@@ -46,10 +46,10 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
         }
     }); 
 
-    const title = initialData ? "Edit billboard" : "Create billboard";
-    const description = initialData ? "Edit a billboard" : "Add a new billboard";
-    const toastMessage = initialData ? "Billboard updated." : "Billboard created.";
-    const action = initialData ? "Save changes" : "Create billboard";
+    const title = initialData ? "Editar outdoor" : "Criar outdoor";
+    const description = initialData ? "Edite um outdoor" : "Adicione um novo outdoor";
+    const toastMessage = initialData ? "Outdoor atualizado." : "Outdoor criado.";
+    const action = initialData ? "Salvar alterações" : "Criar outdoor";
 
     const onSubmit = async (data: BillboardFormValues) => {
         try {
@@ -140,7 +140,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
                                 Nome
                             </FormLabel>
                             <FormControl>
-                                <Input disabled={loading} placeholder="billboard label" {...field}/>
+                                <Input disabled={loading} placeholder="Descrição" {...field}/>
                             </FormControl>
                             <FormMessage/>
                         </FormItem>
