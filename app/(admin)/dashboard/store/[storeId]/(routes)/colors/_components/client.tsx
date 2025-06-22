@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Heading } from "@/components/ui/heading"
 import { Separator } from "@/components/ui/separator"
-import { CategoriesColumn, columns } from "./columns"
+import { ColorColumn, columns } from "./columns"
 import { DataTable } from "@/components/ui/data-table"
 
 import { PlusIcon } from "lucide-react"
@@ -14,11 +14,12 @@ import { UserRole } from "@prisma/client"
 
 
 
-interface CategoryClientProps {
-  data: CategoriesColumn[],
+interface ColorsClientProps {
+  data: ColorColumn[],
 }
 
-export const CategoryClient: React.FC<CategoryClientProps> = ({ 
+export const 
+ColorsClient: React.FC<ColorsClientProps> = ({ 
   data
 }) => {
   const router = useRouter();
@@ -28,25 +29,25 @@ export const CategoryClient: React.FC<CategoryClientProps> = ({
     <>
     <div className="flex items-center justify-between">
       <Heading
-      title={`Categorias (${data.length})`}
-      description="Gerencie categorias para sua loja"
+      title={`Cores (${data.length})`}
+      description="Gerencie cores para seus produtos"
       />
-      <Button onClick={() => router.push(`/dashboard/store/${params.storeId}/categories/new`)}>
+      <Button onClick={() => router.push(`/dashboard/store/${params.storeId}/colors/new`)}>
         <PlusIcon className="mr-2 h-4 w-4"/>
-         Nova categoria
+        Nova cor
       </Button>
     </div>
     <Separator/>
-    <DataTable placeholder="Buscar por Categorias..." searchKey="name" columns={columns} data={data}/>
+    <DataTable placeholder="Buscar por Cores..." searchKey="name" columns={columns} data={data}/>
     <RoleGateNoMessage allowedRoles={[UserRole.ADMIN]}>
     <Heading
     title="API"
-    description="API calls for categories"
+    description="API calls for Colors"
     />
     <Separator />
     <ApiList 
-    entityName="categories"
-    entityIdName="categoriesId"
+    entityName="colors"
+    entityIdName="colorId"
     />
     </RoleGateNoMessage>
     </>

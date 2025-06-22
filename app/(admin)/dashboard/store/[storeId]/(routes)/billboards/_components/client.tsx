@@ -33,7 +33,7 @@ export const BillboardClient: React.FC<BillboardClientProps> = ({
       />
       <Button onClick={() => router.push(`/dashboard/store/${params.storeId}/billboards/new`)}>
         <PlusIcon className="mr-2 h-4 w-4"/>
-        Add new
+        Novo outdoor
       </Button>
     </div>
     <Separator/>

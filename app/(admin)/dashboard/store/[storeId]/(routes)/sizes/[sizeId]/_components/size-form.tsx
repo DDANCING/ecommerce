@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Billboard } from "@prisma/client";
+import { Size } from "@prisma/client";
 import axios from "axios";
 import { Trash } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
@@ -19,17 +19,17 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 const formSchema = z.object({
-    label: z.string().min(1),
-    imageUrl: z.string().min(1)
+    sizeName: z.string().min(1),
+    value: z.string().min(1)
 });
 
-type BillboardFormValues = z.infer<typeof formSchema>;
+type SizeFormValues = z.infer<typeof formSchema>;
 
-interface BillboardFormProps {
-    initialData: Billboard | null;
+interface SizeFormProps {
+    initialData: Size | null;
 }
 
-export const BillboardForm: React.FC<BillboardFormProps> = ({
+export const SizeForm: React.FC<SizeFormProps> = ({
     initialData
 }) => { 
     const params = useParams();
@@ -38,29 +38,30 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const form = useForm<BillboardFormValues>({
+    const form = useForm<SizeFormValues>({
         resolver: zodResolver(formSchema),
-        defaultValues: initialData || {
-            label: "",
-            imageUrl: "",
-        }
+        defaultValues: {
+            sizeName: initialData?.name || "",
+            value: initialData?.value || "",
+    }
     }); 
 
-    const title = initialData ? "Editar outdoor" : "Criar outdoor";
-    const description = initialData ? "Edite um outdoor" : "Adicione um novo outdoor";
-    const toastMessage = initialData ? "Outdoor atualizado." : "Outdoor criado.";
-    const action = initialData ? "Salvar alterações" : "Criar outdoor";
+    const title = initialData ? "Editar tamanho" : "Criar tamanho";
+    const description = initialData ? "Edite um tamanho" : "Adicione um novo tamanho";
+    const toastMessage = initialData ? "Tamanho atualizado." : "Tamanho criado.";
+    const action = initialData ? "Salvar alterações" : "Criar tamanho";
 
-    const onSubmit = async (data: BillboardFormValues) => {
+
+    const onSubmit = async (data: SizeFormValues) => {
         try {
             setLoading(true);
             if (initialData) {
-            await axios.patch(`/api/${params.storeId}/billboards/${params.billboardId}`, data);
+            await axios.patch(`/api/${params.storeId}/sizes/${params.sizeId}`, data);
             } else {
-            await axios.post(`/api/${params.storeId}/billboards`, data);
+            await axios.post(`/api/${params.storeId}/sizes`, data);
             }
             router.refresh();
-            router.push(`/dashboard/store/${params.storeId}/billboards`);
+            router.push(`/dashboard/store/${params.storeId}/sizes`);
             toast.success(toastMessage);
         } catch(error) {
             toast.error("Something went wrong");
@@ -72,12 +73,12 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
     const onDelete = async () => {
         try {
             setLoading(true)
-            await axios.delete(`/api/${params.storeId}/billboards/${params.billboardId}`);
-            router.push("/dashboard");
+            await axios.delete(`/api/${params.storeId}/sizes/${params.sizeId}`);
+            router.push(`/dashboard/store/${params.storeId}/sizes`);
             router.refresh();
-            toast.success("Capa deletada.");
+            toast.success("Tamanho deletado.");
         } catch (error) {
-            toast.error("certifique-se de que você removeu todas as categorias que usam essa capa primeiro.")
+            toast.error("certifique-se de que você removeu todas as produtos que tem este tamanho primeiro.")
         } finally {
             setLoading(false)
         }
@@ -110,37 +111,33 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
         <Separator/>
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
-                 <FormField 
-                    control={form.control}
-                    name="imageUrl"
-                    render={({field}) => (
-                        <FormItem>
-                            <FormLabel>
-                                Imagem de fundo
-                            </FormLabel>
-                            <FormControl>
-                               <ImageUpload 
-                               value={field.value ? [field.value] : []}
-                               disable={loading}
-                               onChange={(url) => field.onChange(url)}
-                               onRemove={() => field.onChange("")}
-                               />
-                            </FormControl>
-                            <FormMessage/>
-                        </FormItem>
-                    )}
-                    />
+
                 <div className="grid grid-cols-3 gap-8">
                     <FormField 
                     control={form.control}
-                    name="label"
+                    name="sizeName"
                     render={({field}) => (
                         <FormItem>
                             <FormLabel>
                                 Nome
                             </FormLabel>
                             <FormControl>
-                                <Input disabled={loading} placeholder="Descrição" {...field}/>
+                                <Input disabled={loading} placeholder="Nome para o tamanho" {...field}/>
+                            </FormControl>
+                            <FormMessage/>
+                        </FormItem>
+                    )}
+                    />
+                    <FormField 
+                    control={form.control}
+                    name="value"
+                    render={({field}) => (
+                        <FormItem>
+                            <FormLabel>
+                                Medida
+                            </FormLabel>
+                            <FormControl>
+                                <Input disabled={loading} placeholder="Medidas aproximadas" {...field}/>
                             </FormControl>
                             <FormMessage/>
                         </FormItem>

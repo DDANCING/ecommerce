@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { CldUploadWidget } from "next-cloudinary";
 import { useTheme } from "next-themes";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "./carousel";
 
 interface ImageUploadProps {
   disable?: boolean;
@@ -27,9 +28,10 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     setIsMounted(true);
   }, []);
 
-  const onUpload = (result: any) => {
-    onChange(result.info.secure_url);
-  };
+const onUpload = (result: any) => {
+  const url = result.info.secure_url;
+  onChange(url); // envia uma string
+};
 
   if (!isMounted) return null;
 
@@ -66,52 +68,62 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   };
 
   return (
-    <div>
-      <div className="mb-4 flex items-center gap-4">
-        {value.map((url) => (
-          <div
-            key={url}
-            className="relative w-[200px] h-[200px] rounded-md overflow-hidden"
-          >
-            <div className="z-10 absolute top-2 right-2">
-              <Button
-                type="button"
-                onClick={() => onRemove(url)}
-                variant="destructive"
-                size="icon"
-              >
-                <Trash className="w-4 h-4" />
-              </Button>
+   <div>
+    <Carousel className="w-full max-w-4xl mb-4">
+      <CarouselContent>
+        {value.map((url, index) => (
+          <CarouselItem key={index} className="basis-1/3">
+            <div className="relative w-full h-[200px] rounded-md overflow-hidden">
+              <div className="absolute top-2 right-2 z-10">
+                <Button
+                  type="button"
+                  onClick={() => onRemove(url)}
+                  variant="destructive"
+                  size="icon"
+                >
+                  <Trash className="w-4 h-4" />
+                </Button>
+              </div>
+              <Image
+                src={url}
+                alt={`Image ${index + 1}`}
+                fill
+                className="object-cover"
+              />
             </div>
-            <Image fill className="object-cover" alt="Image" src={url} />
-          </div>
+          </CarouselItem>
         ))}
-      </div>
-      <CldUploadWidget
-        onSuccess={onUpload}
-        uploadPreset="eccomercepreset"
-        options={{
-          styles: {
-            palette: theme === "dark" ? paletteDark : paletteLight,
-          },
-        }}
-      >
-        {({ open }) => {
-          const onClick = () => open?.();
-          return (
-            <Button
-              type="button"
-              disabled={disable}
-              variant="secondary"
-              onClick={onClick}
-            >
-              <ImagePlusIcon className="h-4 w-4 mr-2" />
-              Upload Image
-            </Button>
-          );
-        }}
-      </CldUploadWidget>
-    </div>
+      </CarouselContent>
+       <CarouselPrevious />
+      <CarouselNext />
+    </Carousel>
+
+    <CldUploadWidget
+      onSuccess={onUpload}
+      uploadPreset="eccomercepreset"
+      options={{
+        multiple: true,
+        styles: {
+          palette: theme === "dark" ? paletteDark : paletteLight,
+        },
+      }}
+    >
+      {({ open }) => {
+        const onClick = () => open?.();
+        return (
+          <Button
+            type="button"
+            disabled={disable}
+            variant="secondary"
+            onClick={onClick}
+          >
+            <ImagePlusIcon className="h-4 w-4 mr-2" />
+            Adicionar Imagem
+          </Button>
+        );
+      }}
+    </CldUploadWidget>
+  </div>
   );
 };
 
