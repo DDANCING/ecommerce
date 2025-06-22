@@ -1,97 +1,66 @@
-<a name="readme-top"></a>
+# 🛒 E-commerce Platform with Admin Dashboard & Auth.js v5
 
-[![Contributors][contributors-shield]][contributors-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
+Este é um projeto completo de E-commerce desenvolvido com **Next.js 15**, **Auth.js v5**, **Prisma ORM**, **TailwindCSS**, e diversos componentes avançados da **Radix UI**. O projeto inclui:
 
+- 💼 Painel administrativo (Admin Dashboard)
+- 🔐 Autenticação com Auth.js v5 e Prisma Adapter
+- 🛍️ Catálogo de produtos com imagens
+- 📦 Sistema de pedidos e estoque
+- 💳 Integração com Stripe
+- 🌘 Suporte a temas escuro/claro
+- 📈 Dashboard com gráficos (Recharts)
+- ☁️ Upload de imagens com Next Cloudinary
 
+---
 
-<!--LOGO -->
-<br />
-<div align="center">
-  <a href="https://github.com/DDANCING/ProjectA">
-    <img src="https://i.imgur.com/WQJge11.png" alt="Logo" width="82" height="82">
-  </a>
+## 🚀 Tecnologias e Bibliotecas
 
-  <h3 align="center">ProjectA </h3>
+- **Next.js 15**  
+- **Auth.js v5**  
+- **Prisma ORM** com PostgreSQL  
+- **Tailwind CSS** + Tailwind Merge + Animate  
+- **Radix UI** (componentes interativos e acessíveis)  
+- **Stripe** (pagamentos online)  
+- **Zod** (validação de formulários)  
+- **React Hook Form**  
+- **Recharts** (dashboard gráfico)  
+- **Cloudinary** (upload e manipulação de imagens)  
+- **Appwrite** (opcional para notificações, storage ou auth alternativa)  
+- **Zustand** (gerenciamento de estado leve)
 
-  <p align="center">
-   In learning there is no Plan B!
-    <br />
-    <a href="https://github.com/DDANCING/ProjectA"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://projecta.top/">View Demo</a>
-    ·
-    <a href="https://projecta.top/bug-reporting/">Report Bug</a>
-    ·
-    <a href="https://projecta.top/feedback/">Request Feature</a>
-  </p>
-</div>
+---
 
+## 🧠 Funcionalidades Principais
 
+### 👥 Autenticação
+- Registro, login e logout com Auth.js v5
+- Integração com banco via Prisma Adapter
+- Suporte a múltiplos provedores (ex: OAuth, Email)
 
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
+### 🛠️ Dashboard Administrativo
+- Gerenciamento de produtos, categorias e estoque
+- Visualização de pedidos e relatórios
+- Interface construída com componentes Radix
 
+### 🛍️ Loja Virtual
+- Catálogo com busca e filtros
+- Carrinho de compras
+- Checkout com Stripe
+- Histórico de pedidos
 
+### 📊 Estatísticas
+- Dashboard com gráficos de vendas, produtos e usuários
+- Recharts integrados ao painel admin
 
-<!-- ABOUT THE PROJECT -->
-## About The Project
+---
 
-[![ProjectA][product-screenshot]](https://projecta.top/feedback/)
+## 🧪 Como Rodar o Projeto
 
-ProjectA is an innovative music school that employs effective teaching methods to provide a comprehensive and immersive learning experience. We offer a wide range of resources for students and teachers, from course registration to interaction with musical activities and challenges.
+### 1. Clone o repositório
 
-Explore the features:
-
-* User registration and authentication
-* Music library with comprehensive details and YouTube links
-* Instrument tuning tools
-* Real-time song playing with feedback
-* Scoring system and performance history
-* Course registration and access with video and text materials
-* Course management for teachers
-* Interactive activities with immediate feedback
-
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-### Built With
-
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-
-* [![Next][Next.js]][Next-url]
-* Prisma
-* Auth.js v5
-* three.js
-* Tailwind css
-* Shadcn/ui
-
+```bash
+git clone https://github.com/seu-usuario/ecommerce.git
+cd ecommerce
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -145,15 +114,14 @@ Create your account and navigate through the various sections of the code. If yo
 ## Roadmap
 
 - [x] Next configuration
-- [x] Add auth5 authentication and 2FA
-- [x] Add user settings
-- [IN PROGRESS] Add the teacher mode where it's possible to create and manage courses and students
-- [ ] Add activities module with level feedback for students
-- [ ] Add games module with level feedback for students
-- [ ] Add score board with ranks to develop competitive mode
-- [ ] Multi-language Support
-    - [ ] Portugese
-    - [ ] Spanish
+- [x] Autenticação com Auth.js v5
+- [x] Painel administrativo com CRUD de produtos
+- [x] Integração com Stripe
+- [x] Upload de imagens via Cloudinary
+- [ ] Reviews e avaliações de produtos
+- [ ] Funcionalidade de favoritos
+- [IN PROGRESS] Email sender
+    - [ ] Notificações por email com Resend
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -187,14 +155,3 @@ Project Link: [https://projecta.top/](https://projecta.top/)
 [contributors-url]: https://github.com/DDANCING
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/marcelo-mazzonetto-87214b233/
-[product-screenshot]: https://i.imgur.com/NrciebN.png
-[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
-[Next-url]: https://nextjs.org/
-[Prisma-url]: https://www.prisma.io/
-[Svelte.dev]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00
-[Svelte-url]: https://svelte.dev/
-[Laravel.com]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
-[Laravel-url]: https://laravel.com
-[tailwind-url]: https://tailwindcss.com/
-[JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
-[JQuery-url]: https://jquery.com 
