@@ -98,12 +98,13 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
             />
            {initialData && (
             <Button
-                disabled={loading}
-                variant="destructive"
-                size="icon"
-                onClick={() => setOpen(true)}
+              type="button" 
+              disabled={loading}
+              variant="destructive"
+              size="icon"
+              onClick={() => setOpen(true)}
             >
-                <Trash className="h-4 w-4"/>
+              <Trash className="h-4 w-4" />
             </Button>
         )}
         </div>

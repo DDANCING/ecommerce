@@ -34,9 +34,10 @@ const formSchema = z.object({
 type ProductFormValues = z.infer<typeof formSchema>;
 
 interface ProductFormProps {
-    initialData: Product & {
-        images: Image[]
-    } | null;
+    initialData: (Omit<Product, "price"> & {
+        price: number;
+        images: Image[];
+    }) | null;
     categories: Category[];
     colors: Color[];
     sizes: Size[];
@@ -122,19 +123,20 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full max-w-4xl mx-auto">
                    <CardHeader>
-                     <div className="flex items-center">
+                     <div className="flex items-center justify-between">
                 <Heading
                     title={title}
                     description={description}
                 />
                 {initialData && (
                     <Button
-                        disabled={loading}
-                        variant="destructive"
-                        size="icon"
-                        onClick={() => setOpen(true)}
+                      type="button" 
+                      disabled={loading}
+                      variant="destructive"
+                      size="icon"
+                      onClick={() => setOpen(true)}
                     >
-                        <Trash className="h-4 w-4" />
+                      <Trash className="h-4 w-4" />
                     </Button>
                 )}
             </div>
