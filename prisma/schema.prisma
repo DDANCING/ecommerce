@@ -157,6 +157,7 @@ model Product {
   size Size @relation(fields: [sizeId], references: [id])
   colorId String
   color Color @relation(fields: [colorId], references: [id])
+  orderItems OrderItem[]
   images Image[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -168,15 +169,70 @@ model Product {
 }
 
 model Image {
-  id String @id @default(uuid())
+  id        String @id @default(uuid())
   productId String
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-  url String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([productId])
 }
+
+model Buyer {
+  id           String   @id @default(uuid())
+  fullName     String
+  document     String   @db.VarChar(18) @unique
+  email        String   @unique
+  phone        String
+
+  address      String
+  number       String
+  complement   String?
+  neighborhood String
+  city         String
+  state        String
+  cep          String   @db.VarChar(9)
+
+  orders       Order[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Order {
+  id             String       @id @default(uuid())
+
+  buyerId        String
+  buyer          Buyer        @relation(fields: [buyerId], references: [id])
+  orderItems     OrderItem[]
+
+  isPaid         Boolean      @default(false)
+  paymentMethod  String?
+  installments   Int?        
+  status         String?
+  totalAmount    Decimal?
+
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([buyerId])
+}
+
+model OrderItem {
+  id         String   @id @default(uuid())
+  orderId    String
+  order      Order    @relation(fields: [orderId], references: [id])
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id])
+  quantity   Int      @default(1)
+  unitPrice  Decimal  
+  subtotal   Decimal 
+
+  @@index([orderId])
+  @@index([productId])
+  @@unique([orderId, productId])
+}
+
 
 enum UserRole {
   ADMIN

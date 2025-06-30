@@ -1,11 +1,13 @@
 "use client";
 
-import { StoreModal } from "@/components/modals/store-modal";
 
+
+
+import { BuyerModal } from "@/components/modals/buyer-modal";
 import { useEffect, useState } from "react";
 
 
-export const ModalProvider = () => {
+export const BuyerModalProvider = () => {
     const [isMounted, setIsMounted] = useState(false);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -19,7 +21,7 @@ export const ModalProvider = () => {
 
     return (
         <>
-            <StoreModal/>
+          <BuyerModal/>
         </>
     );
 };

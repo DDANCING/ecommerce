@@ -6,6 +6,8 @@ import { redirect } from "next/navigation";
 import React from 'react';
 import NavBar from "@/app/(admin)/_components/admin-navbar";
 import { ModalProvider } from "@/providers/modal-provider";
+import { SettingsModalProvider } from "@/providers/profile-settings-provider";
+import { BuyerModalProvider } from "@/providers/buyer-provider";
 
 interface LayoutComponentProps {
   children: React.ReactNode;
@@ -39,7 +41,9 @@ export default async function DashboardLayout({
     <>
     <RoleGate allowedRoles={[UserRole.ADMIN, UserRole.SELLER, UserRole.OWNER]} >
       <NavBar/>
+      <BuyerModalProvider/>
       <ModalProvider/>
+      <SettingsModalProvider/>
       {children}
     </RoleGate>
     </>

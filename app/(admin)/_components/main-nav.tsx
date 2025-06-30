@@ -62,12 +62,27 @@ export function MainNav({ className, ...props }: React.HTMLAttributes<HTMLElemen
       },
       
     ];
-  } else if (pathname === "/dashboard") {
+  } else if (pathname?.startsWith("/dashboard")) {
     routes = [
       {
         href: "/dashboard",
-        label: "Overview",
+        label: "Dashboard",
         active: pathname === "/dashboard"
+      },
+      {
+        href: "/dashboard/overview",
+        label: "Overview",
+        active: pathname === "/dashboard/overview"
+      },
+      {
+        href: "/dashboard/orders",
+        label: "Pedidos",
+        active: pathname === "/dashboard/orders"
+      },
+      {
+        href: "/dashboard/buyers",
+        label: "Clientes",
+        active: pathname === "/dashboard/buyers"
       }
     ];
   }
