@@ -53,7 +53,7 @@ const [open, setOpen] = useState(false)
 
 const onStoreSelect = (store: { value: string, label: string}) => {
     setOpen(false)
-    router.push(`/dashboard/store/${store.value}`)
+    router.push(`/dashboard/store/${store.value}/products`)
 }
 
     return (

@@ -25,11 +25,7 @@ export function MainNav({ className, ...props }: React.HTMLAttributes<HTMLElemen
 
   if (pathname?.startsWith("/dashboard/store")) {
     routes = [
-      {
-        href: `/dashboard/store/${params.storeId}/overview`,
-        label: "Overview",
-        active: pathname === `/dashboard/store/${params.storeId}/overview`
-      },
+     
       {
         href: `/dashboard/store/${params.storeId}/products`,
         label: "Produtos",
