@@ -1,14 +1,16 @@
+import { cn } from "@/lib/utils";
 
 interface Props {
   children: React.ReactNode;
+  className?: string;
 }
 
 
 const Conteiner = ({
-     children
+     children, className
 }: Props) => {
     return (
-        <div className="mx-auto max-w-7xl">
+        <div  className={cn(className)}>
             {children}
         </div>
     )

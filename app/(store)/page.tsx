@@ -1,4 +1,5 @@
 import { registerVisitor } from "@/actions/register-visitor";
+import Image from "next/image";
 
 
 export default async function Home() {
@@ -6,7 +7,7 @@ export default async function Home() {
   
   return (
     <div className="flex  m-20">
-      
+
     </div>
   );
 }

@@ -13,6 +13,7 @@ import { DashboardIcon } from "@radix-ui/react-icons";
 import { RoleGateNoMessage } from "@/components/auth/role-gate";
 import { UserRole } from "@prisma/client";
 import Conteiner from "./ui/conteiner";
+import { GlobalSearch } from "@/components/ui/global-search";
 
 
 interface NavbarItemProps {
@@ -35,8 +36,8 @@ const NavbarItem = ({
         <Button
          asChild
          className={cn(
-         "bg-transparent hover:bg-transparent rounded-full text-foreground hover:border px-3.5 text-lg py-6",
-         isActive && "bg-foreground text-background"
+         "bg-transparent rounded-full text-muted-foreground px-3.5 text-lg py-6 hover:bg-transparent hover:text-foreground/80",
+         isActive && " text-foreground hover:text-foreground"
         )}>
             <Link
             href={href}
@@ -50,9 +51,7 @@ const NavbarItem = ({
 const navbarItems = [
     { href: "/", Children: "Home" },
     { href: "/about", Children: "About" },
-    { href: "/features", Children: "Features" },
-    { href: "/pricing", Children: "Pricing" },
-    { href: "/contact", Children: "Contact" },
+    
 ];
 
 export const Navbar = ({ user }: UserProps) => {
@@ -71,21 +70,25 @@ export const Navbar = ({ user }: UserProps) => {
             </span>
         </Link>
         <NavbarSidebar user={user} open={isSidebarOpen} items={navbarItems} onOpenChange={setIsSidebarOpen}/>
-         <div className="items-center gap-4 hidden lg:flex">
-        <Conteiner>
-       
-            {navbarItems.map((item) => (
-                <NavbarItem 
-                key={item.href}
-                href={item.href}
-                isActive={pathname === item.href}
-                >
-                    {item.Children}
-                </NavbarItem>
-            ))}
-     
-        </Conteiner>
-           </div>
+        <div className="w-[50%] mx-auto items-center mt-5">
+  <GlobalSearch />
+  </div>
+        <div className="items-center gap-4 hidden lg:flex justify-around">
+
+
+  <Conteiner className="flex items-center">
+
+    {navbarItems.map((item) => (
+      <NavbarItem
+        key={item.href}
+        href={item.href}
+        isActive={pathname === item.href}
+      >
+        {item.Children}
+      </NavbarItem>
+    ))}
+  </Conteiner>
+</div>
         <div className="hidden lg:flex">
            {user? (
             <div className="flex mx-8 items-center gap-4">
