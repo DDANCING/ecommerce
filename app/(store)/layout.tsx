@@ -3,6 +3,7 @@ import { Navbar } from "./_components/navbar";
 import { Footer } from "./_components/footer";
 import { auth } from "@/auth";
 import { SessionProvider } from "next-auth/react";
+import { registerVisitor } from "@/actions/register-visitor";
 
 interface Props {
   children: React.ReactNode;
@@ -10,6 +11,7 @@ interface Props {
 
 
 const Layout = async ({ children }: Props) => {
+  
   const session = await auth()
   const userId = session?.user.id;
   

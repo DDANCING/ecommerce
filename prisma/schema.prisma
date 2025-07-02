@@ -73,6 +73,15 @@ model TwoFactorConfirmation {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model Visitor {
+  id         String   @id @default(uuid())
+  date       DateTime @unique
+  mobile     Int      @default(0)
+  web        Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
 model Store {
   id         String       @id @default(uuid())
   name       String

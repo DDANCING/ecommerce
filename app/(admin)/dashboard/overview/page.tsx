@@ -32,12 +32,12 @@ import { TopProductsChart } from "@/components/overview/chart-03";
   
         <div className="px-4 md:px-6 lg:px-8 @container max-h-[50vh]">
           <div className="w-full mx-auto">
-            <header className="flex flex-wrap gap-3 min-h-20 py-4 shrink-0 items-center transition-all ease-linear border-b">
+            <header className="flex flex-wrap gap-3 min-h-20 py-4 shrink-0 items-center transition-all ease-linear ">
           
               <ActionButtons />
             </header>
             <div className="overflow-hidden">
-              <div className="grid auto-rows-min @2xl:grid-cols-4 *:-ms-px *:-mt-px -m-px">
+              <div className="grid gap-4 auto-rows-min @2xl:grid-cols-4 *:-ms-px *:-mt-px -m-px">
                  <SalesBarChart
                    title="Vendas por Mês"
                    data={salesData}

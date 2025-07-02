@@ -47,7 +47,7 @@ export function SalesBarChart({
   const lastMonth = data[data.length - 1]?.month as string;
 
   return (
-    <Card className="gap-4">
+    <Card className="bg-gradient-to-b from-muted/30 via-background/30 to-background/30 backdrop-blur-md gap-4">
       <CardHeader>
         <div className="flex items-center justify-between gap-2">
           <div className="space-y-0.5">

@@ -12,6 +12,7 @@ import { ProfileOptions } from "@/components/auth/user-button";
 import { DashboardIcon } from "@radix-ui/react-icons";
 import { RoleGateNoMessage } from "@/components/auth/role-gate";
 import { UserRole } from "@prisma/client";
+import Conteiner from "./ui/conteiner";
 
 
 interface NavbarItemProps {
@@ -70,7 +71,9 @@ export const Navbar = ({ user }: UserProps) => {
             </span>
         </Link>
         <NavbarSidebar user={user} open={isSidebarOpen} items={navbarItems} onOpenChange={setIsSidebarOpen}/>
-        <div className="items-center gap-4 hidden lg:flex">
+         <div className="items-center gap-4 hidden lg:flex">
+        <Conteiner>
+       
             {navbarItems.map((item) => (
                 <NavbarItem 
                 key={item.href}
@@ -80,7 +83,9 @@ export const Navbar = ({ user }: UserProps) => {
                     {item.Children}
                 </NavbarItem>
             ))}
-        </div>
+     
+        </Conteiner>
+           </div>
         <div className="hidden lg:flex">
            {user? (
             <div className="flex mx-8 items-center gap-4">

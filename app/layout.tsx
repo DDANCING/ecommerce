@@ -27,7 +27,7 @@ export default async function RootLayout({
 
   return (
   <SessionProvider session={session}>
-      <html lang="en" suppressHydrationWarning>
+      <html lang="pt-br" suppressHydrationWarning>
         <body className={montserrat.className}>
           <NextTopLoader
             color="#fafafa"

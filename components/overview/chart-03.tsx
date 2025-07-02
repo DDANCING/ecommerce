@@ -32,7 +32,7 @@ export function TopProductsChart({ data }: Props) {
   const topProduct = data[0];
 
   return (
-    <Card className="gap-4">
+    <Card className="bg-gradient-to-b from-muted/30 via-background/30 to-background/30 backdrop-blur-md gap-4">
       <CardHeader>
         <div className="flex items-start gap-3">
           <div className="">

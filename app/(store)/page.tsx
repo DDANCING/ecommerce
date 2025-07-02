@@ -1,16 +1,12 @@
-
-
-import { Button } from "@/components/ui/button";
-
+import { registerVisitor } from "@/actions/register-visitor";
 
 
 export default async function Home() {
-
+  await registerVisitor();
+  
   return (
     <div className="flex  m-20">
-      <Button className="font-black">  
-        HELLO
-      </Button>
+      
     </div>
   );
 }
