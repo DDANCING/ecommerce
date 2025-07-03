@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/chart";
 import { CustomTooltipContent } from "./charts-extra";
 import { Badge } from "@/components/ui/badge";
+import { IconTrendingDown, IconTrendingUp } from "@tabler/icons-react";
 
 type SalesDataItem = {
   month: string;
@@ -54,9 +55,22 @@ export function SalesBarChart({
             <CardTitle>{title}</CardTitle>
             <div className="flex items-start gap-2">
               <div className="font-semibold text-2xl">{totalLabel}</div>
-              <Badge className="mt-1.5 bg-emerald-500/24 text-emerald-500 border-none">
-                {percentageChange}
-              </Badge>
+              {parseFloat(percentageChange) > 0 ? (
+                <Badge className="mt-1.5 bg-emerald-500/24 text-emerald-500 border-none"> 
+                  +{parseFloat(percentageChange).toFixed(1)}%
+                  <IconTrendingUp />
+                </Badge>
+              ) : parseFloat(percentageChange) < 0 ? (
+                <Badge className="mt-1.5 bg-rose-500/24 text-rose-500 border-none"> 
+                  {parseFloat(percentageChange).toFixed(1)}%
+                  <IconTrendingDown />
+                </Badge>
+              ) : (
+                <Badge className="mt-1.5 bg-muted text-muted-foreground border-none"> 
+                  0.0%
+                </Badge>
+              )}
+
             </div>
           </div>
         </div>

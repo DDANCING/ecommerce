@@ -62,12 +62,64 @@ export const getMonthlySales = async () => {
   return data;
 };
 
+export async function getCurrentVsLastMonthSalesUntilToday() {
+  const today = new Date();
+
+  const startOfThisMonth = startOfMonth(today);
+  const sameDayLastMonth = subMonths(today, 1);
+  const startOfLastMonth = startOfMonth(sameDayLastMonth);
+
+  const endOfThisPeriod = today;
+  const endOfLastPeriod = new Date(
+    startOfLastMonth.getFullYear(),
+    startOfLastMonth.getMonth(),
+    today.getDate()
+  );
+
+  const currentOrders = await db.order.aggregate({
+    where: {
+      isPaid: true,
+      createdAt: {
+        gte: startOfThisMonth,
+        lte: endOfThisPeriod,
+      },
+    },
+    _sum: {
+      totalAmount: true,
+    },
+  });
+
+  const lastOrders = await db.order.aggregate({
+    where: {
+      isPaid: true,
+      createdAt: {
+        gte: startOfLastMonth,
+        lte: endOfLastPeriod,
+      },
+    },
+    _sum: {
+      totalAmount: true,
+    },
+  });
+
+  const current = currentOrders._sum.totalAmount?.toNumber() || 0;
+  const last = lastOrders._sum.totalAmount?.toNumber() || 0;
+
+  const percentage =
+    last > 0 ? ((current - last) / last) * 100 : current > 0 ? 100 : 0;
+
+  return {
+    current,
+    last,
+    percentage,
+  };
+}
 
 export const getMonthlyBuyers = async () => {
   const now = new Date();
   const data: { month: string; actual: number; projected: number }[] = [];
 
-  // Coletar dados reais
+
   for (let i = NUMBER_OF_MONTHS - 1; i >= 0; i--) {
     const monthStart = startOfMonth(subMonths(now, i));
     const monthEnd = endOfMonth(subMonths(now, i));
@@ -85,11 +137,11 @@ export const getMonthlyBuyers = async () => {
     data.push({
       month: monthLabel,
       actual: buyers,
-      projected: 0, // será preenchido abaixo
+      projected: 0, 
     });
   }
 
-  // Aplicar regressão linear sobre os dados reais
+  
   const x = data.map((_, i) => i);
   const y = data.map((d) => d.actual);
 

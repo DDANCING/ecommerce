@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/chart";
 import { CustomTooltipContent } from "./charts-extra";
 import { Badge } from "@/components/ui/badge";
+import { IconTrendingDown, IconTrendingUp } from "@tabler/icons-react";
 
 interface BuyerChartData {
   month: string;
@@ -96,9 +97,21 @@ export function NewBuyersChart({ data, total, percentageChange }: Props) {
             <CardTitle>Novos Clientes</CardTitle>
             <div className="flex items-start gap-2">
               <div className="font-semibold text-2xl">{total.toLocaleString()}</div>
-              <Badge className="mt-1.5 bg-emerald-500/24 text-emerald-500 border-none">
-                +{percentageChange.toFixed(1)}%
-              </Badge>
+               {percentageChange > 0 ? (
+                <Badge className="mt-1.5 bg-emerald-500/24 text-emerald-500 border-none"> 
+                  +{percentageChange.toFixed(1)}%
+                  <IconTrendingUp />
+                </Badge>
+              ) : percentageChange < 0 ? (
+                <Badge className="mt-1.5 bg-rose-500/24 text-rose-500 border-none"> 
+                  {percentageChange.toFixed(1)}%
+                  <IconTrendingDown />
+                </Badge>
+              ) : (
+                <Badge className="mt-1.5 bg-muted text-muted-foreground border-none"> 
+                  0.0%
+                </Badge>
+              )}
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-4">

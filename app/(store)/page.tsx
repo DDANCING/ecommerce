@@ -1,5 +1,5 @@
 import { registerVisitor } from "@/actions/register-visitor";
-import Image from "next/image";
+
 
 
 export default async function Home() {

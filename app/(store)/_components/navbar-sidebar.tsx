@@ -2,6 +2,9 @@ import Link from "next/link";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { RoleGateNoMessage } from "@/components/auth/role-gate";
+import { UserRole } from "@prisma/client";
+import { DashboardIcon } from "@radix-ui/react-icons";
 
 
 interface NavbarItem {
@@ -45,9 +48,15 @@ export const NavbarSidebar = ({ items, onOpenChange, open, user }: Props) => {
                     ))}
                     <div className="border-t">
                 {user? (
-                    <div>
-                   
-                    </div>
+                    <RoleGateNoMessage allowedRoles={[UserRole.ADMIN, UserRole.SELLER, UserRole.OWNER]} >
+                          <Link 
+                onClick={() => onOpenChange(false)}
+                href="/dashboard"
+                 className="w-full gap-2 text-left p-4 hover:bg-foreground hover:text-background flex items-center text-base font-medium"
+                 >
+                  <DashboardIcon/> <h1> Dashboard </h1> 
+                 </Link>
+                    </RoleGateNoMessage>
                 ):(
                     <div>
               <Link 

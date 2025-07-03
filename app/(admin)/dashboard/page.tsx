@@ -1,6 +1,6 @@
 import { getDashboardCards } from "@/actions/getDashboardCards";
-import { ChartAreaInteractive } from "@/components/ChartAreaInteractive";
-import { SectionCards } from "@/components/section-cards"
+import { ChartAreaInteractive } from "@/app/(admin)/dashboard/_components/ChartAreaInteractive";
+import { SectionCards } from "@/app/(admin)/dashboard/_components/section-cards"
 
 
 

@@ -96,20 +96,20 @@ const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
          <div className="flex h-full w-full">
     <UrlTabs defaultValue="account">
       <TabsList className={cn(
-        "grid w-full grid-cols-3",
+        "grid w-full grid-cols-3 bg-background",
         user?.isOAuth !== false && "grid w-full grid-cols-3"
       )}
       >  
-        <TabsTrigger value="account">Account</TabsTrigger>
+        <TabsTrigger value="account">Conta</TabsTrigger>
         {user?.isOAuth === false &&(
-        <TabsTrigger value="password">Password</TabsTrigger>
+        <TabsTrigger value="password">Senha</TabsTrigger>
         )}
-        <TabsTrigger value="configs">Preferences</TabsTrigger>
+        <TabsTrigger value="configs">Preferências</TabsTrigger>
       </TabsList>
-      <TabsContent value="account">
-        <Card className="shadow-none">
+      <TabsContent value="account" className="bg-transparent">
+        <Card className="bg-gradient-to-b from-muted/30 via-background/30 to-background/30 backdrop-blur-md border-none">
           <CardHeader>
-            <CardTitle>Account</CardTitle>
+            
           </CardHeader>
           <CardContent className="space-y-2">
           
@@ -124,7 +124,7 @@ const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
               name="name"
               render={({ field }) => (
             <FormItem>
-              <FormLabel> Name </FormLabel>
+              <FormLabel> Nome </FormLabel>
               <FormControl>
                 <Input
                 {...field}
@@ -160,11 +160,11 @@ const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
               render={({ field }) => (
             <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
               <div className="space-y-0.5">
-                <FormLabel>  Two Factor Authentication  </FormLabel>
-                <FormDescription>
-                  Enable two factor authentication for your account
-                </FormDescription>
-              </div>
+  <FormLabel>Autenticação em Dois Fatores</FormLabel>
+  <FormDescription>
+    Ative a autenticação em dois fatores para sua conta
+  </FormDescription>
+</div>
               <FormControl>
                 <Switch 
                 disabled={isPending}
@@ -180,11 +180,11 @@ const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
            <DialogFooter className="border-t border-border px-6 py-4">
           <DialogClose asChild>
             <Button type="button" variant="outline">
-              Cancel
+              Cancelar
             </Button>
           </DialogClose>
            <Button  disabled={isPending} type="submit" > 
-            {isPending? <SyncLoader size={6}/> : "Save"}
+            {isPending? <SyncLoader size={6}/> : "Salvar"}
            </Button>
         </DialogFooter>
           
@@ -206,7 +206,7 @@ const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
             onSubmit={form.handleSubmit(onSubmit)}
             >
               <div className="space-y-4" >
-            <Card className="p-6 shadow-none"> 
+            <Card className="bg-gradient-to-b from-muted/30 via-background/30 to-background/30 backdrop-blur-md border-none p-4"> 
                 <>
               <FormField
               control={form.control}
@@ -214,7 +214,7 @@ const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
               name="password"
               render={({ field }) => (
             <FormItem>
-              <FormLabel> Password </FormLabel>
+              <FormLabel> Senha </FormLabel>
               <FormControl>
                 <Input
                 {...field}
@@ -231,7 +231,7 @@ const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
               name="newPassword"
               render={({ field }) => (
             <FormItem>
-              <FormLabel> New Password </FormLabel>
+              <FormLabel> Nova senha </FormLabel>
               <FormControl>
                 <Input
                 {...field}
@@ -248,11 +248,11 @@ const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
                <DialogFooter className="border-t border-border px-6 py-4">
           <DialogClose asChild>
             <Button type="button" variant="outline">
-              Cancel
+              Cancelar
             </Button>
           </DialogClose>
             <Button disabled={isPending} type="submit" > 
-            {isPending? <SyncLoader size={6} /> : "Charge your password"}
+            {isPending? <SyncLoader size={6} /> : "Mudar senha"}
            </Button>
         </DialogFooter>
               </Card> 
@@ -265,9 +265,9 @@ const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
       </TabsContent>
  )} 
       <TabsContent value="configs">
-        <Card className="shadow-none">
+        <Card className="bg-gradient-to-b from-muted/30 via-background/30 to-background/30 backdrop-blur-md border-none p-4">
           <CardHeader>
-            <CardTitle>Preferences</CardTitle>
+            <CardTitle>Preferências</CardTitle>
             <CardDescription>
               
             </CardDescription>

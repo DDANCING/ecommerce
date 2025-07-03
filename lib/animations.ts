@@ -1,3 +1,5 @@
+import { Transition } from "framer-motion"
+
 export const fadeInUp = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
@@ -58,3 +60,10 @@ export const scaleIn = {
   animate: { scale: 1, opacity: 1 },
   transition: { duration: 0.5 }
 } 
+
+export const transition: Transition = {
+  delay: 0.1,
+  type: "spring",
+  bounce: 0,
+  duration: 0.6,
+};

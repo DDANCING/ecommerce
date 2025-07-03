@@ -92,48 +92,48 @@ export function ChartAreaInteractive() {
           </Select>
           </div>
         </CardHeader>
-       <CardContent>
-        {isLoading ? (
-          <div className="text-center py-10 text-muted-foreground">Carregando...</div>
-        ) : (
-          <ChartContainer className="h-[300px]" config={chartConfig}>
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={data}>
-                <defs>
-                  {Object.entries(chartConfig).map(([key, config]) => (
-                    <linearGradient id={key} key={key} x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor={config.color} stopOpacity={0.4} />
-                      <stop offset="95%" stopColor={config.color} stopOpacity={0} />
-                    </linearGradient>
-                  ))}
-                </defs>
-                <XAxis dataKey="date" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis fontSize={12} tickLine={false} axisLine={false} />
-                <CartesianGrid strokeDasharray="3 3" />
-               <Tooltip content={(props) => <ChartTooltipContent {...props} />} />
-                {Object.entries(chartConfig).map(([key, config]) => (
-                  <Area
-                    key={key}
-                    type="monotone"
-                    dataKey={key}
-                    stroke={config.color}
-                    fill={`url(#${key})`}
-                    strokeWidth={2}
-                  />
-                ))}
-                <Legend
-                content={(props) => (
-                  <ChartLegendContent
-                    payload={[...(props.payload ?? [])]} // <-- aqui
-                    verticalAlign="bottom"
-                  />
-                )}
+      <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6"> {/* Adicione essa classe */}
+  {isLoading ? (
+    <div className="text-center py-10 text-muted-foreground">Carregando...</div>
+  ) : (
+    <ChartContainer className="h-[150px] w-full" config={chartConfig}>
+      <ResponsiveContainer width="100%" height="100%">
+        <AreaChart data={data}>
+          <defs>
+            {Object.entries(chartConfig).map(([key, config]) => (
+              <linearGradient id={key} key={key} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor={config.color} stopOpacity={0.4} />
+                <stop offset="95%" stopColor={config.color} stopOpacity={0} />
+              </linearGradient>
+            ))}
+          </defs>
+          <XAxis dataKey="date" fontSize={12} tickLine={false} axisLine={false} />
+          <YAxis fontSize={12} tickLine={false} axisLine={false} />
+          <CartesianGrid strokeDasharray="3 3" />
+          <Tooltip content={(props) => <ChartTooltipContent {...props} />} />
+          {Object.entries(chartConfig).map(([key, config]) => (
+            <Area
+              key={key}
+              type="monotone"
+              dataKey={key}
+              stroke={config.color}
+              fill={`url(#${key})`}
+              strokeWidth={2}
+            />
+          ))}
+          <Legend
+            content={(props) => (
+              <ChartLegendContent
+                payload={[...(props.payload ?? [])]}
+                verticalAlign="bottom"
               />
-              </AreaChart>
-            </ResponsiveContainer>
-          </ChartContainer>
-        )}
-      </CardContent>
+            )}
+          />
+        </AreaChart>
+      </ResponsiveContainer>
+    </ChartContainer>
+  )}
+</CardContent>
     </Card>
   )
 }
