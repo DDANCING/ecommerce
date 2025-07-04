@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+
+@layer utilities {
+  .no-scrollbar {
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+  }
+}
+
+
+
 @custom-variant dark (&:is(.dark *));
 
 @layer base {

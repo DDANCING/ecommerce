@@ -25,11 +25,55 @@ export type SafeOrder = {
   }[];
 };
 
-export interface Billboard {
+export interface StoreProduct {
   id: string;
-  label: string;
+  name: string;
+  price: number;
+  isFeatured: boolean;
+  isArchived: boolean;
+  originalPrice?: number | null; 
+  rating?: number;
+  description?: string;
+  reviewCount?: number;
+  onAdd?: () => void;
+  onFavorite?: () => void;
+  enableAnimations?: boolean;
+  size: {
+    id: string;
+    name: string;
+    value: string;
+  };
+  color: {
+    id: string;
+    name: string;
+    value: string;
+  };
+  images: {
+    id: string;
+    url: string;
+  }[];
+}
+
+export interface Billboard {
+  id?: string;
+  title: string;
+  subtitle?: string;
+  category?: {
+    id: string;
+    name: string;
+    products: StoreProduct[];
+  };
+  description?: string;
   imageUrl: string;
-};
+  callToAction?: {
+    text?: string;
+    href?: string;
+  };
+  storeId?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
 
 export interface Category { 
   id: string;

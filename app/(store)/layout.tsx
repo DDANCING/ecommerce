@@ -19,7 +19,7 @@ const Layout = async ({ children }: Props) => {
 
   return (
     <SessionProvider session={session}>
-      <div className="flex min-h-screen flex-col">
+      <div className="flex min-h-screen flex-col h-10 overflow-auto no-scrollbar">
         <Navbar user={userId ? { id: userId } : null} />
      
         <main className="flex-1">{children}</main>

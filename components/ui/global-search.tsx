@@ -66,8 +66,8 @@ export function GlobalSearch() {
         onSubmit={handleSubmit}
         className="hidden md:block w-full max-w-sm"
       >
-        <Command className="rounded-xl border shadow-md bg-background ">
-          <div className="relative">
+        <Command className="rounded-xl border shadow-md bg-background/60">
+          <div className="relative text-foreground">
             <CommandInput
               placeholder="Buscar produtos, categorias..."
               value={input}

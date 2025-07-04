@@ -1,6 +1,5 @@
-
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage } from "zustand/middleware";
 
 export type CartItem = {
   id: string;
@@ -31,9 +30,7 @@ export const useCart = create<CartState>()(
         if (existingItem) {
           set({
             cartItems: get().cartItems.map((i) =>
-              i.id === item.id
-                ? { ...i, quantity: i.quantity + 1 }
-                : i
+              i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
             ),
           });
         } else {
@@ -77,7 +74,8 @@ export const useCart = create<CartState>()(
       },
     }),
     {
-      name: "cart-storage", // chave do localStorage
+      name: "cart-storage",
+      storage: createJSONStorage(() => localStorage), 
     }
   )
 );
