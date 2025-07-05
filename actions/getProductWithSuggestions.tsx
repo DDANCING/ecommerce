@@ -45,7 +45,7 @@ export const getProductWithSuggestions = async (productId: string) => {
       id: { not: productId },
       isArchived: false,
     },
-    take: 4,
+    take: 6,
     include: {
       images: {
         select: {

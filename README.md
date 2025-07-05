@@ -1,200 +1,105 @@
-<a name="readme-top"></a>
+# Plataforma de E-commerce Full-Stack
 
-[![Contributors][contributors-shield]][contributors-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
+Este é um projeto de e-commerce completo, construído com as tecnologias mais modernas do ecossistema JavaScript. A aplicação é dividida em duas partes principais: uma loja virtual para os clientes e um painel de administração para gerenciamento.
 
+## Funcionalidades
 
+### Loja (Storefront)
+- **Navegação e Visualização de Produtos**: Explore produtos por categorias, preços e mais.
+- **Busca Avançada**: Encontre produtos facilmente com uma busca rápida e eficiente.
+- **Carrinho de Compras**: Adicione, remova e gerencie produtos no carrinho.
+- **Autenticação de Usuário**: Sistema completo de login, registro e recuperação de senha.
+- **Checkout Seguro**: Integração com Stripe para processamento de pagamentos.
+- **Design Responsivo**: Experiência de usuário otimizada para desktops, tablets e celulares.
 
-<!--LOGO -->
-<br />
-<div align="center">
-  <a href="https://github.com/DDANCING/ProjectA">
-    <img src="https://i.imgur.com/WQJge11.png" alt="Logo" width="82" height="82">
-  </a>
+### Painel de Administração (Dashboard)
+- **Gerenciamento de Loja**: Crie e gerencie múltiplas lojas a partir de um único painel.
+- **Gerenciamento de Produtos**: Adicione, edite e remova produtos, incluindo imagens, preços e estoque.
+- **Gerenciamento de Categorias**: Organize produtos em categorias personalizadas.
+- **Gerenciamento de "Billboards"**: Destaque promoções e categorias na página inicial.
+- **Visualização de Pedidos**: Acompanhe todos os pedidos realizados na loja.
+- **Análises e Gráficos**: Visualize a receita, vendas e outros dados importantes em gráficos interativos.
+- **API Segura**: Endpoints de API para gerenciar os recursos da loja.
 
-  <h3 align="center">ProjectA </h3>
+## Tecnologias Utilizadas
 
-  <p align="center">
-   In learning there is no Plan B!
-    <br />
-    <a href="https://github.com/DDANCING/ProjectA"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://projecta.top/">View Demo</a>
-    ·
-    <a href="https://projecta.top/bug-reporting/">Report Bug</a>
-    ·
-    <a href="https://projecta.top/feedback/">Request Feature</a>
-  </p>
-</div>
+- **Framework**: [Next.js](https://nextjs.org/) (com App Router)
+- **Linguagem**: [TypeScript](https://www.typescriptlang.org/)
+- **ORM**: [Prisma](https://www.prisma.io/)
+- **Autenticação**: [NextAuth.js](https://next-auth.js.org/)
+- **UI**: [Tailwind CSS](https://tailwindcss.com/) e [shadcn/ui](https://ui.shadcn.com/)
+- **Pagamentos**: [Stripe](https://stripe.com/)
+- **Validação de Formulários e Esquemas**: [Zod](https://zod.dev/)
+- **Gerenciador de Pacotes**: [Bun](https://bun.sh/)
 
+## Como Começar
 
+Siga as instruções abaixo para configurar e executar o projeto em seu ambiente local.
 
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
+### Pré-requisitos
 
+- [Node.js](https://nodejs.org/en/) (versão 18 ou superior)
+- [Bun](https://bun.sh/)
 
+### Instalação
 
-<!-- ABOUT THE PROJECT -->
-## About The Project
+1.  **Clone o repositório:**
+    ```bash
+    git clone https://github.com/seu-usuario/seu-repositorio.git
+    cd seu-repositorio
+    ```
 
-[![ProjectA][product-screenshot]](https://projecta.top/feedback/)
+2.  **Instale as dependências:**
+    ```bash
+    bun install
+    ```
 
-ProjectA is an innovative music school that employs effective teaching methods to provide a comprehensive and immersive learning experience. We offer a wide range of resources for students and teachers, from course registration to interaction with musical activities and challenges.
+3.  **Configure as variáveis de ambiente:**
+    Crie um arquivo `.env` na raiz do projeto, copiando o exemplo de `.env.example` (se existir) ou usando as variáveis abaixo.
 
-Explore the features:
+4.  **Execute as migrações do banco de dados:**
+    Isso irá criar as tabelas no seu banco de dados com base no schema do Prisma.
+    ```bash
+    bunx prisma db push
+    ```
 
-* User registration and authentication
-* Music library with comprehensive details and YouTube links
-* Instrument tuning tools
-* Real-time song playing with feedback
-* Scoring system and performance history
-* Course registration and access with video and text materials
-* Course management for teachers
-* Interactive activities with immediate feedback
+5.  **Inicie o servidor de desenvolvimento:**
+    ```bash
+    bun dev
+    ```
 
+A aplicação estará disponível em [http://localhost:3000](http://localhost:3000).
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+## Variáveis de Ambiente
 
+Para que a aplicação funcione corretamente, você precisa configurar as seguintes variáveis no seu arquivo `.env`:
 
+```env
+# URL do Banco de Dados (Ex: PostgreSQL, MySQL, etc.)
+# Usado pelo Prisma para conectar ao banco.
+DATABASE_URL="postgresql://user:password@host:port/database?sslmode=require"
 
-### Built With
+# URL da sua aplicação, usado pelo NextAuth.js
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
 
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
+# Segredo para o NextAuth.js. Gere um com `openssl rand -base64 32`
+NEXTAUTH_SECRET="seu-segredo-aqui"
+NEXTAUTH_URL="http://localhost:3000/api/auth"
 
-* [![Next][Next.js]][Next-url]
-* Prisma
-* Auth.js v5
-* three.js
-* Tailwind css
-* Shadcn/ui
+# Chaves da API do Stripe
+STRIPE_API_KEY="sk_test_..."
+STRIPE_WEBHOOK_SECRET="whsec_..."
 
+# (Opcional) Configuração para envio de emails (ex: Resend)
+RESEND_API_KEY="seu-api-key"
+```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+## Estrutura do Projeto
 
-
-
-<!-- GETTING STARTED -->
-## Getting Started
-
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
-
-### Prerequisites
-
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
-
-### Installation
-
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
-
-1. Clone the repo
-   ```sh
-   git clone https://github.com/DDANCING/ProjectA.git
-   ```
-2. Install NPM packages
-   ```sh
-   npm install
-   ```
-3. Run project
-   ```sh
-   npm run dev
-   ```
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- USAGE EXAMPLES -->
-## Usage
-
-Create your account and navigate through the various sections of the code. If you wish to visit the teachers' section, please contact me at (45) 998405219.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- ROADMAP -->
-## Roadmap
-
-- [x] Next configuration
-- [x] Add auth5 authentication and 2FA
-- [x] Add user settings
-- [IN PROGRESS] Add the teacher mode where it's possible to create and manage courses and students
-- [ ] Add activities module with level feedback for students
-- [ ] Add games module with level feedback for students
-- [ ] Add score board with ranks to develop competitive mode
-- [ ] Multi-language Support
-    - [ ] Portugese
-    - [ ] Spanish
-
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-
-<!-- LICENSE -->
-## License
-
-Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- CONTACT -->
-## Contact
-
-Developer - [Marcelo mazzonetto](https://www.linkedin.com/in/marcelo-mazzonetto-87214b233/) - projecta.contactt@gmail.com
-Fone - +55(45)998405219
-
-Project Link: [https://projecta.top/](https://projecta.top/)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
-[contributors-url]: https://github.com/DDANCING
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://www.linkedin.com/in/marcelo-mazzonetto-87214b233/
-[product-screenshot]: https://i.imgur.com/NrciebN.png
-[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
-[Next-url]: https://nextjs.org/
-[Prisma-url]: https://www.prisma.io/
-[Svelte.dev]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00
-[Svelte-url]: https://svelte.dev/
-[Laravel.com]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
-[Laravel-url]: https://laravel.com
-[tailwind-url]: https://tailwindcss.com/
-[JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
-[JQuery-url]: https://jquery.com 
+- **/app**: Contém as rotas, layouts e páginas da aplicação (usando o App Router do Next.js).
+- **/actions**: Funções server-side (Server Actions) para mutações de dados.
+- **/components**: Componentes React reutilizáveis, incluindo componentes de UI da `shadcn/ui`.
+- **/lib**: Funções utilitárias, configuração de clientes (Stripe, Prisma) e lógica de autenticação.
+- **/prisma**: Schema do banco de dados (`schema.prisma`) e migrações.
+- **/hooks**: Hooks React customizados para lógica de estado e outras funcionalidades.
+- **/schemas**: Esquemas de validação com Zod.

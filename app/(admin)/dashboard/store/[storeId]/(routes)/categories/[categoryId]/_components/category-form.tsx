@@ -47,10 +47,11 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
         }
     }); 
 
-    const title = initialData ? "Edit category" : "Create category";
-    const description = initialData ? "Edit a category" : "Add a new category";
-    const toastMessage = initialData ? "category updated." : "category created.";
-    const action = initialData ? "Save changes" : "Create category";
+    const title = initialData ? "Editar categoria" : "Criar categoria";
+    const description = initialData ? "Edite uma categoria" : "Adicione uma nova categoria";
+    const toastMessage = initialData ? "Categoria atualizada." : "Categoria criada.";
+    const action = initialData ? "Salvar alterações" : "Criar categoria";
+
 
     const onSubmit = async (data: CategoryFormValues) => {
         try {

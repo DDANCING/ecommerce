@@ -6,12 +6,14 @@ interface ProductIdPageProps {
 }
 
 const ProductIdPage = async ({ params }: ProductIdPageProps) => {
+
   const { productId, storeId } = await params;
 
   const product = await db.product.findUnique({
     where: {
       id: productId,
     },
+    
     include: {
       images: true,
     },
@@ -35,21 +37,25 @@ const ProductIdPage = async ({ params }: ProductIdPageProps) => {
     },
   });
 
+  const productFormatted = product
+  ? {
+      ...product,
+      price: Number(product.price),
+      originalPrice: product.originalPrice ? Number(product.originalPrice) : undefined,
+      sku: product.sku ? Number(product.sku) : undefined, // converte sku para number | undefined
+      rating: product.rating ?? undefined,
+      reviewCount: product.reviewCount ?? undefined,
+      description: product.description ?? '',
+    }
+  : null;
   return (
     <div className="flex-col">
       <div className="flex-1 space-y-4 p-8">
         <ProductForm
+          initialData={productFormatted}
           categories={categories}
           colors={colors}
           sizes={sizes}
-          initialData={
-            product
-              ? {
-                  ...product,
-                  price: product.price.toNumber(),
-                }
-              : null
-          }
         />
       </div>
     </div>
