@@ -30,6 +30,7 @@ export const getBillboardData = async () => {
             },
             select: {
               id: true,
+              sku: true,
               name: true,
               price: true,
               isFeatured: true,
@@ -90,6 +91,7 @@ export const getBillboardData = async () => {
         name: category.name,
         products: randomProducts.map((product) => ({
           id: product.id,
+          sku: product.sku ?? undefined,
           name: product.name,
           price: Number(product.price),
           isFeatured: product.isFeatured,

@@ -12,6 +12,7 @@ import { formatter, cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 import { containerVariants, contentVariants, favoriteVariants, overlayVariants } from "@/lib/animations"
 import { Badge } from "@/components/ui/badge"
+import { isMobile } from 'react-device-detect'
 
 interface ProductCardProps {
   product: StoreProduct
@@ -59,6 +60,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         "shadow-lg shadow-black/5 cursor-pointer group"
       )}
     >
+     {isMobile && (
+  <Link href={`/product/${product.id}`} className="absolute inset-0 z-50" aria-label={`Ver detalhes de ${product.name}`}>
+    {/* Um span invisível para acessibilidade */}
+    <span className="sr-only">Ver detalhes do produto</span>
+  </Link>
+)}
       {/* Imagem e botão de favorito */}
       <div className="relative overflow-hidden">
        {product.originalPrice && (

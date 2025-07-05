@@ -38,6 +38,7 @@ export interface StoreProduct {
   onAdd?: () => void;
   onFavorite?: () => void;
   enableAnimations?: boolean;
+  sku?: number | null;
   size: {
     id: string;
     name: string;

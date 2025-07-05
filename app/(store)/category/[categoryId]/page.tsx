@@ -30,6 +30,7 @@ const ProductsByCategory = await db.category.findMany({
         rating: true,
         description: true,
         reviewCount: true,
+        sku: true,
         size: {
           select: {
             id: true,
@@ -63,6 +64,7 @@ const products = ProductsByCategory.flatMap((category) =>
     rating: product.rating ?? undefined,
     description: product.description ?? undefined,
     reviewCount: product.reviewCount ?? undefined,
+    sku: product.sku ?? undefined,
   }))
 );
 
