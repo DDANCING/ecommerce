@@ -1,0 +1,99 @@
+import { db } from "@/lib/db";
+import ProductCard from "../../_components/ui/product-card";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
+
+interface  CategoryIdPageProps {
+  params: Promise<{ categoryId: string }>
+}
+
+
+export default async function CategoriesPage({ params }: CategoryIdPageProps) {
+
+ const { categoryId } = await params;
+const ProductsByCategory = await db.category.findMany({
+  where: {
+    id: categoryId
+  },
+  include: {
+    products: {
+      where: {
+        isArchived: false,
+        isFeatured: true,
+      },
+      select: {
+        id: true,
+        name: true,
+        price: true,
+        isFeatured: true,
+        isArchived: true,
+        originalPrice: true,
+        rating: true,
+        description: true,
+        reviewCount: true,
+        size: {
+          select: {
+            id: true,
+            name: true,
+            value: true,
+          },
+        },
+        color: {
+          select: {
+            id: true,
+            name: true,
+            value: true,
+          },
+        },
+        images: {
+          select: {
+            id: true,
+            url: true,
+          },
+        },
+      },
+    },
+  },
+});
+
+const products = ProductsByCategory.flatMap((category) =>
+  category.products.map((product) => ({
+    ...product,
+    price: product.price.toNumber(),
+    originalPrice: product.originalPrice?.toNumber() ?? null,
+    rating: product.rating ?? undefined,
+    description: product.description ?? undefined,
+    reviewCount: product.reviewCount ?? undefined,
+  }))
+);
+
+ return (
+  <div className="w-screen flex flex-col flex-wrap items-center justify-center gap-4 mt-20">
+    <div className="w-[80%]">
+    <div className="w-full mb-10">
+    <h1 className="text-2xl font-bold">{ProductsByCategory[0]?.name}</h1>
+      <Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/">Inicio</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/category">Categorias</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>Categoria</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+    </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4  gap-4">
+  {products.map((product) => ( 
+    <ProductCard key={product.id} product={product} />
+  ))}
+</div>
+    </div>
+  </div>
+);
+
+}

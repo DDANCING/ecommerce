@@ -10,6 +10,8 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import ProductCard from "@/app/(store)/_components/ui/product-card";
+import { motion } from "framer-motion";
+import { fadeInUp, slideInLeft } from "@/lib/animations";
 
 interface BillboardCarouselProps {
   data: Billboard[];
@@ -52,9 +54,9 @@ const BillboardCarousel: React.FC<BillboardCarouselProps> = ({ data, fistProduct
                     className="object-cover"
                     priority
                   />
-                <div className="hidden md:flex absolute top-[1/5] left-15 ">
+                <motion.div {...slideInLeft} transition={{delay: 0.5}} className="hidden md:flex absolute top-[1/5] left-15 ">
                   <ProductCard product={fistProducts}/>
-                </div>
+                </motion.div>
                 <div className="absolute bottom-0.5">
                 <p className="text-lg mt-2">{`${current + 1}/${data.length}`}</p>
 

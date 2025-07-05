@@ -11,6 +11,7 @@ import { useCart } from "@/hooks/use-cart"
 import { formatter, cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 import { containerVariants, contentVariants, favoriteVariants, overlayVariants } from "@/lib/animations"
+import { Badge } from "@/components/ui/badge"
 
 interface ProductCardProps {
   product: StoreProduct
@@ -60,13 +61,18 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     >
       {/* Imagem e botão de favorito */}
       <div className="relative overflow-hidden">
+       {product.originalPrice && (
+        <Badge className="absolute bg-rose-500 left-4 top-4 rounded-full">
+        {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
+        </Badge>
+       ) }
         <motion.div variants={imageVariants}>
           <Image
             src={imageUrl}
             alt={product.name}
             width={320}
             height={240}
-            className="w-full h-56 object-cover"
+            className="w-full h-54 object-cover"
           />
         </motion.div>
 

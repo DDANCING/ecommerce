@@ -51,7 +51,7 @@ export const Navbar = ({ user }: UserProps) => {
     {
       title: "Carrinho",
       icon: ShoppingCart,
-      href: "/carrinho",
+      href: "/cart",
       content: <CartButton />,
     },
     {
