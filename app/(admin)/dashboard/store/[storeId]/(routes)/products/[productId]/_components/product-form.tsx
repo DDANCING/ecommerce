@@ -393,19 +393,28 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   )}
 />
 
-
-<FormField
-    control={form.control}
-    name="rating"
-    render={({ field }) => (
-        <FormItem>
-            <FormLabel>Avaliação</FormLabel>
-            <FormControl>
-                <Input type="number" disabled={loading} placeholder="Ex: 5" min={0} max={5} {...field} />
-            </FormControl>
-            <FormMessage />
-        </FormItem>
-    )}
+ <FormField
+  control={form.control}
+  name="rating"
+  render={({ field }) => (
+    <FormItem>
+      <FormLabel>Avaliação</FormLabel>
+      <FormControl>
+        <Input
+          type="number"
+          disabled={loading}
+          placeholder="Ex: 5"
+          min={0} max={5} {...field} 
+          value={field.value ?? ""}
+          onChange={(e) => {
+            const val = e.target.value;
+            field.onChange(val === "" ? undefined : Number(val));
+          }}
+        />
+      </FormControl>
+      <FormMessage />
+    </FormItem>
+  )}
 />
 
 <FormField

@@ -1,33 +1,36 @@
+// app/actions/getBillboardData.ts
+
 "use server";
 
 import { db } from "@/lib/db";
 
+function sample<T>(base: T[], amount: number): T[] {
+  const arr = [...base];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr.slice(0, amount);
+}
+
 export const getBillboardData = async () => {
-  const data = await db.billboard.findMany({
+  const billboards = await db.billboard.findMany({
     select: {
       id: true,
       label: true,
-      imageUrl: true,
       subtitle: true,
       description: true,
+      imageUrl: true,
+      storeId: true,
       createdAt: true,
       updatedAt: true,
-      storeId: true,
-      callToAction: {
-        select: {
-          href: true,
-          text: true,
-        },
-      },
+      callToAction: { select: { href: true, text: true } },
       categories: {
         select: {
           id: true,
           name: true,
           products: {
-            where: {
-              isArchived: false,
-              isFeatured: true,
-            },
+            where: { isArchived: false, isFeatured: true },
             select: {
               id: true,
               sku: true,
@@ -39,32 +42,10 @@ export const getBillboardData = async () => {
               rating: true,
               description: true,
               reviewCount: true,
-              category: {
-                select: {
-                  id: true,
-                  name: true,
-                },
-              },
-              size: {
-                select: {
-                  id: true,
-                  name: true,
-                  value: true,
-                },
-              },
-              color: {
-                select: {
-                  id: true,
-                  name: true,
-                  value: true,
-                },
-              },
-              images: {
-                select: {
-                  id: true,
-                  url: true,
-                },
-              },
+              category: { select: { id: true, name: true } },
+              size: { select: { id: true, name: true, value: true } },
+              color: { select: { id: true, name: true, value: true } },
+              images: { select: { id: true, url: true } },
             },
           },
         },
@@ -72,70 +53,49 @@ export const getBillboardData = async () => {
     },
   });
 
-  const billboardData = data.map((item) => ({
-    id: item.id,
-    title: item.label,
-    subtitle: item.subtitle ?? undefined,
-    description: item.description ?? undefined,
-    imageUrl: item.imageUrl,
-    storeId: item.storeId,
-    createdAt: item.createdAt,
-    updatedAt: item.updatedAt,
-    callToAction: item.callToAction
-      ? {
-          text: item.callToAction.text ?? undefined,
-          href: item.callToAction.href ?? undefined,
-        }
-      : undefined,
-    categories: item.categories.map((category) => {
-      const randomProducts = [...category.products]
-        .sort(() => 0.5 - Math.random()) // embaralha
-        .slice(0, 3); // pega até 3
-
+  const billboardData = billboards.map((bb) => {
+    const categories = bb.categories.map((cat) => {
+      const selected = sample(cat.products, 3);
       return {
-        id: category.id,
-        name: category.name,
-        products: randomProducts.map((product) => ({
-          id: product.id,
-          sku: product.sku ?? undefined,
-          name: product.name,
-          price: Number(product.price),
-          isFeatured: product.isFeatured,
-          isArchived: product.isArchived,
-          originalPrice: product.originalPrice
-            ? Number(product.originalPrice)
-            : undefined,
-          rating: product.rating ?? undefined,
-          description: product.description ?? undefined,
-          reviewCount: product.reviewCount ?? undefined,
-          category: {
-            id: product.category.id,
-            name: product.category.name,
-          },
-          size: {
-            id: product.size.id,
-            name: product.size.name,
-            value: product.size.value,
-          },
-          color: {
-            id: product.color.id,
-            name: product.color.name,
-            value: product.color.value,
-          },
-          images: product.images.map((img) => ({
-            id: img.id,
-            url: img.url,
-          })),
+        id: cat.id,
+        name: cat.name,
+        products: selected.map((p) => ({
+          id: p.id,
+          sku: p.sku ?? undefined,
+          name: p.name,
+          price: Number(p.price),
+          isFeatured: p.isFeatured,
+          isArchived: p.isArchived,
+          originalPrice: p.originalPrice ? Number(p.originalPrice) : undefined,
+          rating: p.rating ?? undefined,
+          description: p.description ?? undefined,
+          reviewCount: p.reviewCount ?? undefined,
+          category: { id: p.category.id, name: p.category.name },
+          size: { id: p.size.id, name: p.size.name, value: p.size.value },
+          color: { id: p.color.id, name: p.color.name, value: p.color.value },
+          images: p.images.map((img) => ({ id: img.id, url: img.url })),
         })),
       };
-    }),
-  }));
+    });
 
-  const firstProduct =
-    billboardData[0]?.categories[0]?.products[0] ?? null;
+    const highlightProduct = categories[0]?.products[0] ?? null;
 
-  return {
-    billboardData,
-    firstProduct,
-  };
+    return {
+      id: bb.id,
+      title: bb.label,
+      subtitle: bb.subtitle ?? undefined,
+      description: bb.description ?? undefined,
+      imageUrl: bb.imageUrl,
+      storeId: bb.storeId,
+      createdAt: bb.createdAt,
+      updatedAt: bb.updatedAt,
+      callToAction: bb.callToAction
+        ? { text: bb.callToAction.text ?? undefined, href: bb.callToAction.href ?? undefined }
+        : undefined,
+      categories,
+      highlightProduct,
+    };
+  });
+
+  return { billboardData };
 };

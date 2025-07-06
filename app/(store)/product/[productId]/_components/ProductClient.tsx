@@ -167,12 +167,12 @@ export default function ProductClient({
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                  <BreadcrumbLink href={`/category/${product.category.id}`}>{product.category.name}</BreadcrumbLink>
+                  <BreadcrumbLink href={`/category/${product.category.id}`}>{product.category.name.length > 9 ? product.category.name.slice(0, 9) + "..." : product.category.name}</BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>{product.name}</BreadcrumbPage>
-                </BreadcrumbItem>
+                <BreadcrumbPage>
+                {product.name.length > 9 ? product.name.slice(0, 9) + "..." : product.name}
+               </BreadcrumbPage>
               </BreadcrumbList>
             </Breadcrumb>
             <h1 className="text-3xl font-bold">{product.name}</h1>

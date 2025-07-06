@@ -90,7 +90,7 @@ const products = ProductsByCategory.flatMap((category) =>
     </BreadcrumbItem>
     <BreadcrumbSeparator />
     <BreadcrumbItem>
-      <BreadcrumbPage>Categoria</BreadcrumbPage>
+      <BreadcrumbPage>{ProductsByCategory[0]?.name}</BreadcrumbPage>
     </BreadcrumbItem>
   </BreadcrumbList>
 </Breadcrumb>

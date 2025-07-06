@@ -112,7 +112,7 @@ export function ProductSelectorFormField({
     <CommandItem
       key={product.id}
       onSelect={() => {
-        if (isAlreadySelected) return; // Evita seleção duplicada
+        if (isAlreadySelected) return; 
         f.onChange(product.id);
         update(index, {
           id: product.id,

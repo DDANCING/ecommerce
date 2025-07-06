@@ -1,13 +1,23 @@
 
+import { db } from "@/lib/db";
+import CategoryGrid from "./_components/CategoryGrid";
 
 
 export default async function CategoriesPage() {
+  const categories = await db.category.findMany({
+    where: {
+      products: {
+        some: {},
+      },
+    },
+    include: {
+      billboard: {
+        select: {
+          imageUrl: true,
+        },
+      },
+    },
+  });
 
-
-  return (
-    <div className=" w-screen flex flex-col items-center justify-center">
-      
-     
-    </div>
-  );
+  return <CategoryGrid categories={categories} />;
 }
