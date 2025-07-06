@@ -9,6 +9,12 @@ export const getProductWithSuggestions = async (productId: string) => {
       isArchived: false,
     },
     include: {
+      category: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
       images: {
         select: {
           id: true,
@@ -47,6 +53,12 @@ export const getProductWithSuggestions = async (productId: string) => {
     },
     take: 6,
     include: {
+      category: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
       images: {
         select: {
           id: true,

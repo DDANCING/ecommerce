@@ -4,12 +4,13 @@ import { getBillboardData } from "@/actions/getBillboardData";
 import { db } from "@/lib/db";
 import Image from "next/image";
 import Link from "next/link";
+import { registerVisitor } from "@/actions/register-visitor";
 
 
 
 export default async function Home() {
   const { billboardData, firstProduct } = await getBillboardData();
-  //await registerVisitor();
+  await registerVisitor();
 
   const categories = await db.category.findMany({
     include: {

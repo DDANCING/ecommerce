@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { motion } from "framer-motion";
+
 import {
   Accordion,
   AccordionContent,
@@ -16,10 +19,23 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { Separator } from "@/components/ui/separator";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { cn, formatter } from "@/lib/utils";
 import { StoreProduct } from "@/app/types";
-import Link from "next/link";
-import { Separator } from "@/components/ui/separator";
+import {
+  fadeIn,
+  fadeInUp,
+  scaleIn,
+  staggerContainer,
+} from "@/lib/animations";
 
 interface ProductClientProps {
   product: StoreProduct;
@@ -30,15 +46,12 @@ export default function ProductClient({
   product,
   suggestedProducts,
 }: ProductClientProps) {
-  const [selectedImage, setSelectedImage] = useState<{
-    id: string;
-    url: string;
-  }>(product.images[0]);
+  const [selectedImage, setSelectedImage] = useState(product.images[0]);
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       {/* ===== MOBILE ===== */}
-      <div className="block md:hidden">
+      <motion.div {...fadeIn} className="block md:hidden">
         <Carousel className="w-full">
           <CarouselContent>
             {product.images.map((image) => (
@@ -59,7 +72,7 @@ export default function ProductClient({
           <CarouselNext />
         </Carousel>
 
-        <div className="mt-6 space-y-4">
+        <motion.div {...fadeInUp} className="mt-6 space-y-4">
           <h1 className="text-2xl font-bold">{product.name}</h1>
           <p className="text-xl font-semibold">
             {formatter.format(Number(product.price))}
@@ -99,36 +112,38 @@ export default function ProductClient({
               </AccordionContent>
             </AccordionItem>
           </Accordion>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* ===== TABLET / DESKTOP ===== */}
       <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-10 gap-x-8">
         {/* Miniaturas */}
-       <div className="hidden lg:flex lg:flex-col lg:col-span-2 gap-y-4">
-  {product.images.map((image) => (
-    <button
-      key={image.id}
-      type="button"
-      onClick={() => setSelectedImage(image)}
-      className={cn(
-        "relative h-48 w-48 overflow-hidden rounded-lg border",
-        selectedImage.id === image.id ? "border-black" : "border-muted"
-      )}
-    >
-      <Image
-        src={image.url}
-        alt="Miniatura"
-        fill
-        className="object-cover"
-        sizes="33vw"
-      />
-            </button>
+        <motion.div {...staggerContainer} className="hidden lg:flex lg:flex-col lg:col-span-2 gap-y-4">
+          {product.images.map((image) => (
+            <motion.button
+              key={image.id}
+              type="button"
+              onClick={() => setSelectedImage(image)}
+              className={cn(
+                "relative h-48 w-48 overflow-hidden rounded-lg border",
+                selectedImage.id === image.id ? "border-black" : "border-muted"
+              )}
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
+              <Image
+                src={image.url}
+                alt="Miniatura"
+                fill
+                className="object-cover"
+                sizes="33vw"
+              />
+            </motion.button>
           ))}
-        </div>
+        </motion.div>
 
         {/* Imagem Principal */}
-        <div className="relative w-full aspect-square lg:col-span-5">
+        <motion.div {...scaleIn} className="relative w-full aspect-square lg:col-span-5">
           <Image
             src={selectedImage.url}
             alt={product.name}
@@ -136,31 +151,46 @@ export default function ProductClient({
             className="object-cover rounded-lg"
             sizes="50vw"
           />
-        </div>
+        </motion.div>
 
         {/* Informações do Produto */}
-        <div className="mt-6 md:mt-0 space-y-6 lg:col-span-3">
+        <motion.div {...fadeInUp} className="mt-6 md:mt-0 space-y-6 lg:col-span-3">
           <div>
+            <Breadcrumb className="w-96">
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbLink href="/">Inicio</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbLink href="/products">Catálogo</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbLink href={`/category/${product.category.id}`}>{product.category.name}</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>{product.name}</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
             <h1 className="text-3xl font-bold">{product.name}</h1>
-           <div className="flex items-center gap-2">
-             <p className="text-2xl font-semibold mt-2">
-              {formatter.format(Number(product.price))}
-            </p>
-            {product.originalPrice && (
-              <p className="text-lg font-semibold mt-2 text-muted-foreground line-through">
-              {formatter.format(Number(product.originalPrice))}
-            </p>
-            )}
+            <div className="flex items-center gap-2">
+              <p className="text-2xl font-semibold mt-2">
+                {formatter.format(Number(product.price))}
+              </p>
+              {product.originalPrice && (
+                <p className="text-lg font-semibold mt-2 text-muted-foreground line-through">
+                  {formatter.format(Number(product.originalPrice))}
+                </p>
+              )}
             </div>
           </div>
-          
-          <div className="flex gap-2">
-            <Button size="lg" className="flex-1">
-              ADICIONAR AO CARRINHO
-            </Button>
-            <Button variant="outline" size="lg" className="flex-1">
-              ENCONTRAR NA LOJA
-            </Button>
+
+          <div className="grid 2xl:flex gap-2 ">
+            <Button size="lg">ADICIONAR AO CARRINHO</Button>
+            <Button variant="outline" size="lg">ENCONTRAR NA LOJA</Button>
           </div>
 
           <Accordion type="single" collapsible>
@@ -170,11 +200,14 @@ export default function ProductClient({
                 <p className="text-sm leading-relaxed">{product.description}</p>
                 <ul className="text-sm mt-3 space-y-1">
                   <li>SKU: {product.sku}</li>
-                  <li>Tamaho: {product.size.name}</li>
-                  <li className="flex gap-2 items-center">Cor: {product.color.name} <div 
-             className="h-6 w-6 rounded-full border" 
-            style={{backgroundColor: product.color.value}}
-             /></li>
+                  <li>Tamanho: {product.size.name}</li>
+                  <li className="flex gap-2 items-center">
+                    Cor: {product.color.name}
+                    <div
+                      className="h-6 w-6 rounded-full border"
+                      style={{ backgroundColor: product.color.value }}
+                    />
+                  </li>
                 </ul>
               </AccordionContent>
             </AccordionItem>
@@ -191,42 +224,48 @@ export default function ProductClient({
               </AccordionContent>
             </AccordionItem>
           </Accordion>
-        </div>
+        </motion.div>
       </div>
-     
+
       {/* ===== SUGERIDOS ===== */}
       {suggestedProducts.length > 0 && (
-        <section className="mt-16">
-           <Separator className="mb-4"/>
+        <motion.section {...fadeInUp} className="mt-16">
+          <Separator className="mb-4" />
           <h2 className="text-xl font-semibold mb-4">Você também pode gostar</h2>
 
           <Carousel opts={{ align: "start" }} className="w-full">
             <CarouselContent>
               {suggestedProducts.map((item) => (
-                <Link key={item.id} href={`${item.id}`} className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5">
                 <CarouselItem
-                  
+                  key={item.id}
+                  className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5"
                 >
-                  <div className="space-y-2">
-                    <div className="relative w-full aspect-square overflow-hidden rounded-lg border">
-                      <Image
-                        src={item.images[0].url}
-                        alt={item.name}
-                        fill
-                        className="object-cover"
-                        sizes="25vw"
-                      />
-                    </div>
-                    <p className="text-center text-sm">{item.name}</p>
-                  </div>
+                  <Link href={`${item.id}`}>
+                    <motion.div
+                      {...fadeIn}
+                      whileHover={{ scale: 1.02 }}
+                      transition={{ type: "spring", stiffness: 300 }}
+                      className="space-y-2"
+                    >
+                      <div className="relative w-full aspect-square overflow-hidden rounded-lg border">
+                        <Image
+                          src={item.images[0].url}
+                          alt={item.name}
+                          fill
+                          className="object-cover"
+                          sizes="25vw"
+                        />
+                      </div>
+                      <p className="text-center text-sm">{item.name}</p>
+                    </motion.div>
+                  </Link>
                 </CarouselItem>
-                </Link>
               ))}
             </CarouselContent>
             <CarouselPrevious />
             <CarouselNext />
           </Carousel>
-        </section>
+        </motion.section>
       )}
     </div>
   );

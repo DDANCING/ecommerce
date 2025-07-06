@@ -1,21 +1,13 @@
 import { db } from "@/lib/db";
-import ProductCard from "../../_components/ui/product-card";
+import ProductCard from "../_components/ui/product-card";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 
-interface  CategoryIdPageProps {
-  params: Promise<{ categoryId: string }>
-}
 
 
-export default async function CategoriesPage({ params }: CategoryIdPageProps) {
+export default async function ProductsPage() {
 
- const { categoryId } = await params;
-const ProductsByCategory = await db.category.findMany({
-  where: {
-    id: categoryId
-  },
-  include: {
-    products: {
+
+const Products = await db.product.findMany({
       where: {
         isArchived: false,
         isFeatured: true,
@@ -59,11 +51,9 @@ const ProductsByCategory = await db.category.findMany({
         },
       },
     },
-  },
-});
+  )
 
-const products = ProductsByCategory.flatMap((category) =>
-  category.products.map((product) => ({
+const products = Products.map((product) => ({
     ...product,
     price: product.price.toNumber(),
     originalPrice: product.originalPrice?.toNumber() ?? null,
@@ -72,13 +62,11 @@ const products = ProductsByCategory.flatMap((category) =>
     reviewCount: product.reviewCount ?? undefined,
     sku: product.sku ?? 0,
   }))
-);
 
  return (
   <div className="w-screen flex flex-col flex-wrap items-center justify-center gap-4 mt-24">
-    <div className="w-[80%]">
+    <div className="w-[90%]">
     <div className="w-full mb-10">
-    <h1 className="text-2xl font-bold">{ProductsByCategory[0]?.name}</h1>
       <Breadcrumb>
   <BreadcrumbList>
     <BreadcrumbItem>
@@ -86,16 +74,12 @@ const products = ProductsByCategory.flatMap((category) =>
     </BreadcrumbItem>
     <BreadcrumbSeparator />
     <BreadcrumbItem>
-      <BreadcrumbLink href="/category">Categorias</BreadcrumbLink>
-    </BreadcrumbItem>
-    <BreadcrumbSeparator />
-    <BreadcrumbItem>
-      <BreadcrumbPage>Categoria</BreadcrumbPage>
+      <BreadcrumbPage>Produtos</BreadcrumbPage>
     </BreadcrumbItem>
   </BreadcrumbList>
 </Breadcrumb>
     </div>
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4  gap-4 my-4 mx-auto">
+    <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-4 my-4 mx-auto">
   {products.map((product) => ( 
     <ProductCard key={product.id} product={product} />
   ))}

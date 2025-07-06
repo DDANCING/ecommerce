@@ -1,18 +1,23 @@
 "use client"
 
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { motion, useReducedMotion } from "framer-motion"
+import { motion } from "framer-motion"
 import { ShoppingCart, Star, Heart } from "lucide-react"
+import { isMobile as detectMobile } from "react-device-detect"
 
 import { StoreProduct } from "@/app/types"
 import { useCart } from "@/hooks/use-cart"
 import { formatter, cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
-import { containerVariants, contentVariants, favoriteVariants, overlayVariants } from "@/lib/animations"
+import {
+  containerVariants,
+  contentVariants,
+  favoriteVariants,
+  overlayVariants,
+} from "@/lib/animations"
 import { Badge } from "@/components/ui/badge"
-import { isMobile } from 'react-device-detect'
 
 interface ProductCardProps {
   product: StoreProduct
@@ -21,8 +26,15 @@ interface ProductCardProps {
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const [isAdding, setIsAdding] = useState(false)
   const [isFavorite, setIsFavorite] = useState(false)
+  const [isClient, setIsClient] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
   const addItem = useCart((state) => state.addItem)
+
+  useEffect(() => {
+    setIsClient(true)
+    setIsMobile(detectMobile)
+  }, [])
 
   const handleAddToCart = useCallback(() => {
     setIsAdding(true)
@@ -47,8 +59,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     hover: { scale: 1.1 },
   }
 
-
-
   return (
     <motion.div
       initial="rest"
@@ -60,19 +70,27 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         "shadow-lg shadow-black/5 cursor-pointer group"
       )}
     >
-     {isMobile && (
-  <Link href={`/product/${product.id}`} className="absolute inset-0 z-50" aria-label={`Ver detalhes de ${product.name}`}>
-    {/* Um span invisível para acessibilidade */}
-    <span className="sr-only">Ver detalhes do produto</span>
-  </Link>
-)}
+      {isClient && isMobile && (
+        <Link
+          href={`/product/${product.id}`}
+          className="absolute inset-0 z-50"
+          aria-label={`Ver detalhes de ${product.name}`}
+        >
+          <span className="sr-only">Ver detalhes do produto</span>
+        </Link>
+      )}
+
       {/* Imagem e botão de favorito */}
       <div className="relative overflow-hidden">
-       {product.originalPrice && (
-        <Badge className="absolute bg-rose-500 left-4 top-4 rounded-full">
-        {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
-        </Badge>
-       ) }
+        {product.originalPrice && (
+          <Badge className="absolute bg-rose-500 left-4 top-4 rounded-full">
+            {Math.round(
+              ((product.originalPrice - product.price) / product.originalPrice) *
+                100
+            )}
+            %
+          </Badge>
+        )}
         <motion.div variants={imageVariants}>
           <Image
             src={imageUrl}
@@ -96,7 +114,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               : "bg-muted/20 text-muted hover:bg-muted/30"
           )}
         >
-          <Heart className={cn("w-4 h-4", isFavorite && "fill-current")} />
+          <Heart
+            className={cn("w-4 h-4", isFavorite && "fill-current")}
+          />
         </motion.button>
       </div>
 
@@ -138,21 +158,18 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         variants={overlayVariants}
         className="absolute inset-0 bg-background/95 backdrop-blur-xl flex flex-col justify-end text-start"
       >
-       
-        <div className="p-6"> 
-         
+        <div className="p-6">
           <motion.div variants={contentVariants}>
-               <h4 className="font-semibold">Cor</h4>
-              <div 
-             className="h-6 w-6 rounded-full border" 
-            style={{backgroundColor: product.color.value}}
-             />
-    
-             <p className="text-sm text-muted-foreground mb-4">
+            <h4 className="font-semibold">Cor</h4>
+            <div
+              className="h-6 w-6 rounded-full border"
+              style={{ backgroundColor: product.color.value }}
+            />
+            <p className="text-sm text-muted-foreground mb-4">
               {product.color.name}
             </p>
-            
-            <h4 className="font-semibold ">Detalhes</h4>
+
+            <h4 className="font-semibold">Detalhes</h4>
             <p className="text-sm text-muted-foreground mb-4">
               {product.description ?? "Sem descrição disponível."}
             </p>

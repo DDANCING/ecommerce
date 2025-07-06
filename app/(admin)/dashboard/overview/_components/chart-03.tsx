@@ -31,48 +31,49 @@ export function TopProductsChart({ data }: Props) {
   const totalSales = data.reduce((sum, item) => sum + item.quantity, 0);
   const topProduct = data[0];
 
+  const topProductPercentage = topProduct && totalSales > 0
+    ? ((topProduct.quantity / totalSales) * 100).toFixed(1)
+    : "0.0";
+
   return (
     <Card className="bg-gradient-to-b from-muted/30 via-background/30 to-background/30 backdrop-blur-md gap-4">
       <CardHeader>
         <div className="flex items-start gap-3">
-          <div className="">
+          <div>
             <CardTitle>Top Produtos Vendidos</CardTitle>
             <div className="flex items-start gap-2">
               <div className="font-semibold text-2xl">
                 {totalSales} unidades
               </div>
-              <Badge className="mt-1.5 bg-emerald-500/24 text-emerald-500 border-none">
-                +{((topProduct.quantity / totalSales) * 100).toFixed(1)}%
-              </Badge>
+              {topProduct && (
+                <Badge className="mt-1.5 bg-emerald-500/24 text-emerald-500 border-none">
+                  +{topProductPercentage}%
+                </Badge>
+              )}
             </div>
           </div>
         </div>
       </CardHeader>
-     <CardContent>
-  <div className="w-full h-[250px]">
-    <ResponsiveContainer width="100%" height="100%">
-      <BarChart data={data} layout="vertical">
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis type="number" />
-        <YAxis
-          type="category"
-          dataKey="name"
-          tickLine={false}
-          width={50}
-        />
-        <Bar dataKey="quantity">
-          {data.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={entry.color} />
-          ))}
-        </Bar>
-        <Tooltip
-          formatter={(value: number) => `${value} unidades`}
-          labelFormatter={() => ""}
-        />
-      </BarChart>
-    </ResponsiveContainer>
-  </div>
-</CardContent>
+      <CardContent>
+        <div className="w-full h-[250px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={data} layout="vertical">
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis type="number" />
+              <YAxis type="category" dataKey="name" tickLine={false} width={50} />
+              <Bar dataKey="quantity">
+                {data.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Bar>
+              <Tooltip
+                formatter={(value: number) => `${value} unidades`}
+                labelFormatter={() => ""}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </CardContent>
     </Card>
   );
 }

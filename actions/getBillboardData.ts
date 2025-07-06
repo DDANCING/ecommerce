@@ -39,6 +39,12 @@ export const getBillboardData = async () => {
               rating: true,
               description: true,
               reviewCount: true,
+              category: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
               size: {
                 select: {
                   id: true,
@@ -102,6 +108,10 @@ export const getBillboardData = async () => {
           rating: product.rating ?? undefined,
           description: product.description ?? undefined,
           reviewCount: product.reviewCount ?? undefined,
+          category: {
+            id: product.category.id,
+            name: product.category.name,
+          },
           size: {
             id: product.size.id,
             name: product.size.name,

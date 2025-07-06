@@ -84,6 +84,7 @@ const form = useForm<OrderFormValues>({
       installments: initialData.installments ?? 1,
       totalAmount: initialData.totalAmount ?? 0,
       paymentMethod: initialData.paymentMethod || '',
+      
     }
   : {
       BuyerId: '',
