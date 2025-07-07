@@ -1,14 +1,11 @@
 "use server";
 
 export async function getFretes(fromCep: string, toCep: string, products: any[]) {
-    console.log("Token de ambiente carregado:", !!process.env.MELHOR_ENVIO_TOKEN);
   try {
-    
-
     const response = await fetch("https://sandbox.melhorenvio.com.br/api/v2/me/shipment/calculate", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${process.env.MELHOR_ENVIO_TOKEN}`,
+        Authorization: `Bearer ${process.env.MELHOR_ENVIO_CLIENT_SECRET}`,
         "Content-Type": "application/json",
         Accept: "application/json",
         "User-Agent": "MinhaLoja (marcmaker@outlook.com)" // Adicione seu email real aqui
