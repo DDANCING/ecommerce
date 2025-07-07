@@ -13,7 +13,7 @@ interface Tab {
   title: string;
   icon: LucideIcon;
   href?: string;
-  onClick?: () => void; // ✅ novo campo para aceitar botões
+  onClick?: () => void;
   content?: React.ReactNode;
   type?: never;
 }
@@ -65,7 +65,6 @@ const transition: Transition = {
 export function ExpandableTabs({
   tabs,
   className,
-  activeColor = "text-primary",
   onChange,
 }: ExpandableTabsProps) {
   const pathname = usePathname();
@@ -126,7 +125,7 @@ export function ExpandableTabs({
 
         const handleClick = () => {
           handleSelect(index);
-          tab.onClick?.(); // ✅ chama o onClick se existir
+          tab.onClick?.(); 
         };
 
         return (

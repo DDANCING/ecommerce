@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useState } from "react"
+import { MouseEventHandler, useCallback, useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { motion } from "framer-motion"
@@ -8,7 +8,6 @@ import { ShoppingCart, Star, Heart } from "lucide-react"
 import { isMobile as detectMobile } from "react-device-detect"
 
 import { StoreProduct } from "@/app/types"
-import { useCart } from "@/hooks/use-cart"
 import { formatter, cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 import {
@@ -18,6 +17,7 @@ import {
   overlayVariants,
 } from "@/lib/animations"
 import { Badge } from "@/components/ui/badge"
+import useCart from "@/hooks/use-cart"
 
 interface ProductCardProps {
   product: StoreProduct
@@ -29,23 +29,20 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const [isClient, setIsClient] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
 
-  const addItem = useCart((state) => state.addItem)
+  const cart = useCart();
+
+  const onAddToCart: MouseEventHandler<HTMLButtonElement> = (event) => {
+    event.stopPropagation();
+
+    cart.addItem(product);
+  }
 
   useEffect(() => {
     setIsClient(true)
     setIsMobile(detectMobile)
   }, [])
 
-  const handleAddToCart = useCallback(() => {
-    setIsAdding(true)
-    addItem({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      quantity: 1,
-    })
-    setTimeout(() => setIsAdding(false), 1500)
-  }, [addItem, product])
+
 
   const handleFavorite = () => {
     setIsFavorite(!isFavorite)
@@ -177,7 +174,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
           <motion.div variants={contentVariants} className="space-y-3">
             <motion.button
-              onClick={handleAddToCart}
+              onClick={onAddToCart}
               disabled={isAdding}
               className={cn(
                 buttonVariants({ variant: "default" }),

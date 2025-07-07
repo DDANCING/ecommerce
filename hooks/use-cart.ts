@@ -1,81 +1,58 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
-export type CartItem = {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-  image?: string;
+import { StoreProduct } from "@/app/types";
+import { toast } from "sonner";
+import { redirect, useRouter } from "next/navigation";
+
+interface CartStore {
+  items: StoreProduct[];
+  addItem: (data: StoreProduct) => void;
+  removeItem: (id: string) => void;
+  removeAll: () => void;
 };
 
-interface CartState {
-  cartItems: CartItem[];
-  addItem: (item: CartItem) => void;
-  removeItem: (id: string) => void;
-  updateItemQuantity: (id: string, quantity: number) => void;
-  clearCart: () => void;
-  getCartTotal: () => number;
-  getCartItemCount: () => number;
-}
 
-export const useCart = create<CartState>()(
-  persist(
-    (set, get) => ({
-      cartItems: [],
+const useCart = create(
+  
+  persist<CartStore>((set, get) => ({
+    
+    items: [],
+    addItem: (data: StoreProduct) => {
+      const currentItems = get().items;
+      const existingItem = currentItems.find((item) => item.id === data.id);
 
-      addItem: (item) => {
-        const existingItem = get().cartItems.find((i) => i.id === item.id);
+      if (existingItem) {
+        return toast.info("O item já foi adicionado ao carinho.", {
+          action: {
+            label: "Ver carrinho ",
+            onClick: () => redirect("/cart"),
+          },
+        })
+      }
 
-        if (existingItem) {
-          set({
-            cartItems: get().cartItems.map((i) =>
-              i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-            ),
-          });
-        } else {
-          set({ cartItems: [...get().cartItems, { ...item, quantity: 1 }] });
-        }
-      },
+      set({ items: [...get().items, data]});
+       return toast.info("O item foi adicionado ao carinho.", {
+          action: {
+            label: "Ver carrinho ",
+            onClick: () => redirect("/cart"),
+          },
+        })
+    },
+    removeItem: (id: string) => {
+      set({ items: [...get().items.filter((item) => item.id !== id)]});
+      toast.success("O item foi removido do carinho.", {
+          action: {
+            label: "Ver carrinho ",
+            onClick: () => redirect("/cart"),
+          },
+        })
+    }, 
+    removeAll: () => set({ items: []}),
+  }), {
+    name: "cart-storage",
+    storage: createJSONStorage(() => localStorage)
+  })
+)
 
-      removeItem: (id) => {
-        set({ cartItems: get().cartItems.filter((i) => i.id !== id) });
-      },
-
-      updateItemQuantity: (id, quantity) => {
-        if (quantity <= 0) {
-          get().removeItem(id);
-          return;
-        }
-
-        set({
-          cartItems: get().cartItems.map((i) =>
-            i.id === id ? { ...i, quantity } : i
-          ),
-        });
-      },
-
-      clearCart: () => {
-        set({ cartItems: [] });
-      },
-
-      getCartTotal: () => {
-        return get().cartItems.reduce(
-          (total, item) => total + item.price * item.quantity,
-          0
-        );
-      },
-
-      getCartItemCount: () => {
-        return get().cartItems.reduce(
-          (count, item) => count + item.quantity,
-          0
-        );
-      },
-    }),
-    {
-      name: "cart-storage",
-      storage: createJSONStorage(() => localStorage), 
-    }
-  )
-);
+export default useCart;

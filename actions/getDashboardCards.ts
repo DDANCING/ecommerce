@@ -15,190 +15,226 @@ type DashboardCardProps = {
 export async function getDashboardCards(): Promise<DashboardCardProps[]> {
   const now = new Date();
 
-  // Datas de referência
+  // Datas de referência até o mesmo dia
   const inicioMesAtual = startOfMonth(now);
-  const inicioMesAnterior = startOfMonth(subMonths(now, 1));
-  const inicioDoisMesesAtras = startOfMonth(subMonths(now, 2));
+  const fimMesAtual = now;
 
-  // --- Consultas em paralelo com Promise.all ---
+  const inicioMesAnterior = startOfMonth(subMonths(now, 1));
+  const fimMesAnterior = subMonths(now, 1);
+
+  const inicioDoisMesesAtras = startOfMonth(subMonths(now, 2));
+  const fimDoisMesesAtras = subMonths(now, 2);
+
+  // --- Consultas paralelas ---
   const [
+    receitaAtual,
     receitaMesAnterior,
     receitaDoisMesesAtras,
+    pedidosAtual,
     pedidosMesAnterior,
     pedidosDoisMesesAtras,
+    novosClientesAtual,
     novosClientesMesAnterior,
     novosClientesDoisMesesAtras,
     produtosAtivos,
+    novosProdutosAtual,
     novosProdutosMesAnterior,
     novosProdutosDoisMesesAtras,
   ] = await Promise.all([
-    // Receita mês anterior
+    // Receita mês atual
     db.order.aggregate({
       where: {
         isPaid: true,
         createdAt: {
-          gte: inicioMesAnterior,
-          lt: inicioMesAtual,
+          gte: inicioMesAtual,
+          lte: fimMesAtual,
         },
       },
       _sum: { totalAmount: true },
     }),
 
-    // Receita dois meses atrás
+    // Receita mês anterior até o mesmo dia
     db.order.aggregate({
       where: {
         isPaid: true,
         createdAt: {
-          gte: inicioDoisMesesAtras,
-          lt: inicioMesAnterior,
+          gte: inicioMesAnterior,
+          lte: fimMesAnterior,
         },
       },
       _sum: { totalAmount: true },
     }),
 
-    // Pedidos mês anterior
+    // Receita dois meses atrás até o mesmo dia
+    db.order.aggregate({
+      where: {
+        isPaid: true,
+        createdAt: {
+          gte: inicioDoisMesesAtras,
+          lte: fimDoisMesesAtras,
+        },
+      },
+      _sum: { totalAmount: true },
+    }),
+
+    // Pedidos mês atual
+    db.order.count({
+      where: {
+        isPaid: true,
+        createdAt: {
+          gte: inicioMesAtual,
+          lte: fimMesAtual,
+        },
+      },
+    }),
+
     db.order.count({
       where: {
         isPaid: true,
         createdAt: {
           gte: inicioMesAnterior,
-          lt: inicioMesAtual,
+          lte: fimMesAnterior,
         },
       },
     }),
 
-    // Pedidos dois meses atrás
     db.order.count({
       where: {
         isPaid: true,
         createdAt: {
           gte: inicioDoisMesesAtras,
-          lt: inicioMesAnterior,
+          lte: fimDoisMesesAtras,
         },
       },
     }),
 
-    // Novos clientes mês anterior
+    // Clientes atuais
+    db.buyer.count({
+      where: {
+        createdAt: {
+          gte: inicioMesAtual,
+          lte: fimMesAtual,
+        },
+      },
+    }),
+
     db.buyer.count({
       where: {
         createdAt: {
           gte: inicioMesAnterior,
-          lt: inicioMesAtual,
+          lte: fimMesAnterior,
         },
       },
     }),
 
-    // Novos clientes dois meses atrás
     db.buyer.count({
       where: {
         createdAt: {
           gte: inicioDoisMesesAtras,
-          lt: inicioMesAnterior,
+          lte: fimDoisMesesAtras,
         },
       },
     }),
 
-    // Produtos ativos (total, sempre válido)
+    // Produtos ativos
     db.product.count({
       where: {
         isArchived: false,
       },
     }),
 
-    // Novos produtos mês anterior
     db.product.count({
       where: {
         createdAt: {
-          gte: inicioMesAnterior,
-          lt: inicioMesAtual,
+          gte: inicioMesAtual,
+          lte: fimMesAtual,
         },
       },
     }),
 
-    // Novos produtos dois meses atrás
+    db.product.count({
+      where: {
+        createdAt: {
+          gte: inicioMesAnterior,
+          lte: fimMesAnterior,
+        },
+      },
+    }),
+
     db.product.count({
       where: {
         createdAt: {
           gte: inicioDoisMesesAtras,
-          lt: inicioMesAnterior,
+          lte: fimDoisMesesAtras,
         },
       },
     }),
   ]);
 
-  const receitaAnterior = receitaDoisMesesAtras._sum.totalAmount?.toNumber() ?? 0;
-  const receitaAtual = receitaMesAnterior._sum.totalAmount?.toNumber() ?? 0;
-
-  const crescimentoReceita =
-    receitaAnterior === 0 ? 100 : ((receitaAtual - receitaAnterior) / receitaAnterior) * 100;
-
-  const tendenciaReceita = crescimentoReceita >= 0 ? "up" : "down";
-
   const cards: DashboardCardProps[] = [];
 
-  // === Card 1: Receita Total ===
+  // === Receita Total ===
+  const mediaReceitaAnterior = ((receitaMesAnterior._sum.totalAmount?.toNumber() ?? 0) +
+    (receitaDoisMesesAtras._sum.totalAmount?.toNumber() ?? 0)) / 2;
+
+  const valorReceitaAtual = receitaAtual._sum.totalAmount?.toNumber() ?? 0;
+  const crescimentoReceita = mediaReceitaAnterior === 0 ? 100 : ((valorReceitaAtual - mediaReceitaAnterior) / mediaReceitaAnterior) * 100;
+  const tendenciaReceita = crescimentoReceita >= 0 ? "up" : "down";
+
   cards.push({
     titulo: "Receita Total",
-    valor: `R$ ${receitaAtual.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`,
+    valor: `R$ ${valorReceitaAtual.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`,
     percentual: `${crescimentoReceita.toFixed(1)}%`,
     tendencia: tendenciaReceita,
     destaque: crescimentoReceita >= 0 ? "Receita em alta" : "Receita em queda",
-    subtitulo: "Comparado ao mês anterior",
+    subtitulo: "Comparado à média dos 2 meses anteriores",
   });
 
-  // === Card 2: Novos Clientes ===
-  const crescimentoClientes =
-    novosClientesDoisMesesAtras === 0
-      ? 100
-      : ((novosClientesMesAnterior - novosClientesDoisMesesAtras) / novosClientesDoisMesesAtras) * 100;
-
+  // === Novos Clientes ===
+  const mediaClientesAnterior = (novosClientesMesAnterior + novosClientesDoisMesesAtras) / 2;
+  const crescimentoClientes = mediaClientesAnterior === 0 ? 100 : ((novosClientesAtual - mediaClientesAnterior) / mediaClientesAnterior) * 100;
   const tendenciaClientes = crescimentoClientes >= 0 ? "up" : "down";
 
   cards.push({
     titulo: "Novos Clientes",
-    valor: `${novosClientesMesAnterior}`,
+    valor: `${novosClientesAtual}`,
     percentual: `${crescimentoClientes.toFixed(1)}%`,
     tendencia: tendenciaClientes,
     destaque: "Novos registros no mês",
-    subtitulo: "Compradores cadastrados",
+    subtitulo: "Comparado à média anterior",
   });
 
-  // === Card 3: Produtos Ativos ===
+  // === Produtos Ativos ===
   cards.push({
     titulo: "Produtos Ativos",
     valor: `${produtosAtivos}`,
-    percentual: "+0%", // valor informativo
+    percentual: "",
     tendencia: "up",
     destaque: "Catálogo disponível",
     subtitulo: "Produtos prontos para venda",
   });
 
-  // === Card 4: Novos Produtos ===
-  const crescimentoProdutos =
-    novosProdutosDoisMesesAtras === 0
-      ? 100
-      : ((novosProdutosMesAnterior - novosProdutosDoisMesesAtras) / novosProdutosDoisMesesAtras) * 100;
-
+  // === Novos Produtos ===
+  const mediaProdutosAnterior = (novosProdutosMesAnterior + novosProdutosDoisMesesAtras) / 2;
+  const crescimentoProdutos = mediaProdutosAnterior === 0 ? 100 : ((novosProdutosAtual - mediaProdutosAnterior) / mediaProdutosAnterior) * 100;
   const tendenciaProdutos = crescimentoProdutos >= 0 ? "up" : "down";
 
   cards.push({
     titulo: "Novos Produtos",
-    valor: `${novosProdutosMesAnterior}`,
+    valor: `${novosProdutosAtual}`,
     percentual: `${crescimentoProdutos.toFixed(1)}%`,
     tendencia: tendenciaProdutos,
     destaque: "Expansão do catálogo",
     subtitulo: "Novos produtos adicionados",
   });
 
-  // === Card 5: Ticket Médio ===
-  const ticketMedioAtual = pedidosMesAnterior === 0 ? 0 : receitaAtual / pedidosMesAnterior;
-  const ticketMedioAnterior = pedidosDoisMesesAtras === 0 ? 0 : receitaAnterior / pedidosDoisMesesAtras;
+  // === Ticket Médio ===
+  const ticketMedioAtual = pedidosAtual === 0 ? 0 : valorReceitaAtual / pedidosAtual;
+  const ticketMedioAnterior = ((receitaMesAnterior._sum.totalAmount?.toNumber() ?? 0) + (receitaDoisMesesAtras._sum.totalAmount?.toNumber() ?? 0)) /
+    ((pedidosMesAnterior + pedidosDoisMesesAtras) || 1);
 
   const crescimentoTicket =
-    ticketMedioAnterior === 0
-      ? 100
-      : ((ticketMedioAtual - ticketMedioAnterior) / ticketMedioAnterior) * 100;
-
+    ticketMedioAnterior === 0 ? 100 : ((ticketMedioAtual - ticketMedioAnterior) / ticketMedioAnterior) * 100;
   const tendenciaTicket = crescimentoTicket >= 0 ? "up" : "down";
 
   cards.push({
@@ -207,7 +243,7 @@ export async function getDashboardCards(): Promise<DashboardCardProps[]> {
     percentual: `${crescimentoTicket.toFixed(1)}%`,
     tendencia: tendenciaTicket,
     destaque: "Valor médio por pedido",
-    subtitulo: "Comparado ao mês anterior",
+    subtitulo: "Comparado à média anterior",
   });
 
   return cards;

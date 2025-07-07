@@ -1,32 +1,24 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useState } from "react";
 import { Home, LogOut, Settings, ShoppingCart } from "lucide-react";
 import { BiMenuAltRight } from "react-icons/bi";
 import { Button } from "@/components/ui/button";
 import { NavbarSidebar } from "./navbar-sidebar";
 import { GlobalSearch } from "@/components/ui/global-search";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { LoginButton } from "@/components/auth/login-button";
-import { RegisterButton } from "@/components/auth/register-button";
-import { ExpandableTabs } from "./ui/expandebla-tabs";
 import { useSettingsModal } from "@/hooks/use-settings-modal";
-import { CartButton } from "./ui/cart-button";
-import { logout } from "@/actions/logout";
+import { ExpandableTabs } from "./ui/expandebla-tabs";
 import { LoginExpandableTabs } from "./ui/login-expandable-tabs";
+import useCart from "@/hooks/use-cart";
+import { logout } from "@/actions/logout";
 
-interface NavbarItemProps {
-  href: string;
-  children: React.ReactNode;
-  isActive?: boolean;
-}
-
-type UserProps = {
+interface UserProps {
   user: {
     id: string;
   } | null;
-};
+}
 
 const navbarItems = [
   { href: "/", Children: "Home" },
@@ -36,10 +28,20 @@ const navbarItems = [
 export const Navbar = ({ user }: UserProps) => {
   const settings = useSettingsModal();
   const isMobile = useIsMobile();
+  const cart = useCart();
 
-  const onLogout = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const handleLogout = () => {
     logout();
   };
+
+  if (!isMounted) return null;
 
   const tabs = [
     {
@@ -49,43 +51,44 @@ export const Navbar = ({ user }: UserProps) => {
       content: <Link href="/">Home</Link>,
     },
     {
-      title: "Carrinho",
+      title: `Carrinho (${cart.items.length})`,
       icon: ShoppingCart,
       href: "/cart",
-      content: <CartButton />,
+      content: <Link href="/cart" className="flex gap-1">
+      Carrinho
+       </Link>,
     },
     {
       title: "Configurações",
       icon: Settings,
       content: "Configurações",
-      onClick: () => settings.onOpen(),
+      onClick: settings.onOpen,
     },
     {
       title: "Logout",
       icon: LogOut,
       content: "Sair",
-      onClick: () => onLogout(),
+      onClick: handleLogout,
     },
   ];
 
   const loginTabs = [
-  {
-    title: "Início",
-    icon: Home,
-    href: "/",
-    content: <Link href="/">Home</Link>,
-  },
-
-];
-
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    {
+      title: "Início",
+      icon: Home,
+      href: "/",
+      content: <Link href="/">Home</Link>,
+    },
+  ];
 
   return (
-    <nav className="fixed top-0 left-0 z-50 w-full h-20 flex justify-between font-medium bg-transparent shadow-sm backdrop-blur-lg">
+    <nav className="fixed top-0 left-0 z-50 w-full h-20 flex justify-between items-center font-medium bg-background/60 shadow-sm backdrop-blur-lg">
+      {/* Logo */}
       <Link href="/" className="pl-6 flex items-center w-80">
         <span className="text-5xl font-semibold">Logo</span>
       </Link>
 
+      {/* Sidebar (mobile) */}
       <NavbarSidebar
         user={user}
         open={isSidebarOpen}
@@ -93,12 +96,12 @@ export const Navbar = ({ user }: UserProps) => {
         onOpenChange={setIsSidebarOpen}
       />
 
-      <div className={isMobile ? "mt-6 flex w-full justify-end" : "mx-auto mt-6 w-96"}>
+      {/* Barra de busca central */}
+      <div className={isMobile ? "mt-6 flex w-full justify-end" : "mx-auto mt-3 w-96"}>
         <GlobalSearch />
       </div>
 
-      <div className="items-center gap-4 hidden lg:flex justify-around"></div>
-
+      {/* Tabs de usuário (desktop) */}
       <div className="hidden lg:flex">
         {user ? (
           <ExpandableTabs tabs={tabs} activeColor="text-foreground" />
@@ -107,6 +110,7 @@ export const Navbar = ({ user }: UserProps) => {
         )}
       </div>
 
+      {/* Menu hamburguer (mobile) */}
       <div className="flex lg:hidden items-center justify-center m-4">
         <Button
           className="size-12 border-transparent hover:bg-transparent"

@@ -6,7 +6,6 @@ export const getProductWithSuggestions = async (productId: string) => {
   const product = await db.product.findFirst({
     where: {
       id: productId,
-      isArchived: false,
     },
     include: {
       category: {
