@@ -26,14 +26,7 @@ export async function POST(req: Request) {
 
     if (!fullName) return new NextResponse("Fullname is required", { status: 400 });
     if (!email) return new NextResponse("email is required", { status: 400 });
-    if (!phone) return new NextResponse("phone is required", { status: 400 });
-    if (!address) return new NextResponse("address is required", { status: 400 });
-    if (!city) return new NextResponse("city is required", { status: 400 });
-    if (!state) return new NextResponse("state is required", { status: 400 });
-    if (!cep) return new NextResponse("cep is required", { status: 400 });
-    if (!neighborhood) return new NextResponse("neighborhood is required", { status: 400 });
-    if (!number) return new NextResponse("number is required", { status: 400 });
-    if (!document) return new NextResponse("document is required", { status: 400 });
+   
 
     // Verifica se já existe comprador com mesmo email ou documento
     const existingBuyer = await db.buyer.findFirst({
@@ -74,4 +67,23 @@ export async function POST(req: Request) {
     console.log('[BUYER_POST]', error);
     return new NextResponse("Internal error", { status: 500 });
   }
+}
+
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const email = searchParams.get("email");
+
+  if (!email) {
+    return new NextResponse("Email is required", { status: 400 });
+  }
+
+  const buyer = await db.buyer.findUnique({
+    where: { email },
+  });
+
+  if (!buyer) {
+    return new NextResponse("Buyer not found", { status: 404 });
+  }
+
+  return NextResponse.json(buyer);
 }

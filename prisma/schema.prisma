@@ -211,17 +211,17 @@ model Image {
 model Buyer {
   id           String   @id @default(uuid())
   fullName     String
-  document     String   @db.VarChar(18) @unique
+  document     String?   @db.VarChar(18) @unique
   email        String   @unique
-  phone        String
+  phone        String?
 
-  address      String
-  number       String
+  address      String?
+  number       String?
   complement   String?
-  neighborhood String
-  city         String
-  state        String
-  cep          String   @db.VarChar(9)
+  neighborhood String?
+  city         String?
+  state        String?
+  cep          String?  @db.VarChar(9)
 
   orders       Order[]
   createdAt    DateTime @default(now())

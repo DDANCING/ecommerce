@@ -24,6 +24,7 @@ import { useParams, usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { CommandSeparator } from "cmdk";
 import Link from "next/link";
+import { ChevronLeft } from "@/public/ChevronLeft";
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>
 
@@ -62,7 +63,7 @@ const onStoreSelect = (store: { value: string, label: string}) => {
         <Link
         href="/dashboard"
         >
-        <ArrowLeft className="mx-5 text-muted-foreground hover:text-primary"/> 
+        <ChevronLeft className="mx-5 text-muted-foreground hover:text-primary"/> 
         </Link>
         }
         <Popover open={open} onOpenChange={setOpen}>

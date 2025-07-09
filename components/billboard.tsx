@@ -37,18 +37,18 @@ const BillboardCarousel: React.FC<BillboardCarouselProps> = ({ data }) => {
           });
         }}
       >
-        <CarouselContent className="h-full w-full">
+        <CarouselContent className="h-full w-full gap-4 mt-20 mx-auto">
           {data.map((billboard, index) => (
             <CarouselItem
               key={billboard.id}
-              className="w-screen h-screen flex flex-col md:flex-row items-center justify-center gap-8 relative"
+              className="w-screen h-screen flex flex-col md:flex-row items-center justify-center relative"
             >
-              <div className="flex flex-col justify-center items-center text-center w-screen">
+              <div className="flex flex-col justify-center items-center text-center w-screen ">
                 <Image
                   src={billboard.imageUrl}
                   alt={billboard.title}
                   fill
-                  className="object-cover"
+                  className="object-cover rounded-t-4xl"
                   priority
                 />
 

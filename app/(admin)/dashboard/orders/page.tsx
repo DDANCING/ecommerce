@@ -38,7 +38,7 @@ const OrdersPage = async () => {
     id: item.id,
     fullName: item.buyer.fullName,
     email: item.buyer.email,
-    phone: item.buyer.phone,
+    phone: item.buyer.phone ?? "",
     isPaid: item.isPaid,
     method: item.paymentMethod ?? "",
     totalAmount: item.totalAmount

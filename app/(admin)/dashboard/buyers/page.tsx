@@ -28,7 +28,7 @@ const BuyersPage = async () => {
       id: item.id,
       fullName: item.fullName,
       email: item.email,
-      phone: item.phone,
+      phone: item.phone ?? "",
       createdAt: dataFormatada,
     };
   });

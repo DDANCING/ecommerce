@@ -11,7 +11,8 @@ export const publicRoutes = [
   "/api/webhook",
   "/api/webhook/stripe",
   "/api/audio",
-  "/api/auth/callback"
+  "/api/auth/callback",
+  "/cart"
 ];
 /**
  * an array of routes that are used for authentication

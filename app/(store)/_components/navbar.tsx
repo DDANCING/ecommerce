@@ -79,10 +79,18 @@ export const Navbar = ({ user }: UserProps) => {
       href: "/",
       content: <Link href="/">Home</Link>,
     },
+     {
+      title: `Carrinho (${cart.items.length})`,
+      icon: ShoppingCart,
+      href: "/cart",
+      content: <Link href="/cart" className="flex gap-1">
+      Carrinho
+       </Link>,
+    },
   ];
 
   return (
-    <nav className="fixed top-0 left-0 z-50 w-full h-20 flex justify-between items-center font-medium bg-background/60 shadow-sm backdrop-blur-lg">
+    <nav className="fixed top-0 left-0 z-50 w-full h-20 flex justify-between items-center font-medium bg-background/40 shadow-sm backdrop-blur-lg">
       {/* Logo */}
       <Link href="/" className="pl-6 flex items-center w-80">
         <span className="text-5xl font-semibold">Logo</span>
