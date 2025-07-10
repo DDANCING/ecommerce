@@ -10,14 +10,17 @@ import { RegisterButton } from "@/components/auth/register-button";
 import { usePathname } from "next/navigation";
 import { LogIn, LucideIcon, UserRoundPlus } from "lucide-react";
 
+type IconComponent = React.ComponentType<React.SVGProps<SVGSVGElement> & { size?: number }>;
+
 interface Tab {
   title: string;
-  icon: LucideIcon;
+  icon: IconComponent;
   href?: string;
-  content?: React.ReactNode;
   onClick?: () => void;
+  content?: React.ReactNode;
   type?: never;
 }
+
 
 interface Separator {
   type: "separator";

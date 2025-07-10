@@ -17,7 +17,7 @@ type CleanProduct = Omit<
   color: Color;
 };
 
-function sanitizeProduct(product: any): CleanProduct {
+function sanitizeProduct(product: any): SafeProduct {
   return {
     id: product.id,
     name: product.name,
@@ -34,6 +34,9 @@ function sanitizeProduct(product: any): CleanProduct {
     updatedAt: product.updatedAt,
     size: product.size,
     color: product.color,
+    originalPrice: product.originalPrice ? product.originalPrice.toNumber() : null,
+    rating: product.rating ?? 0,
+    reviewCount: product.reviewCount ?? 0,
   };
 }
 

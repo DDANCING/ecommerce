@@ -16,6 +16,14 @@ export type OrderColumn = {
   sent: string;
   createdAt: string;
   installments: number;
+  shippingMethod: string;
+  shippingCost: number;
+  coupon: {
+    id: string;
+    discountType: "percentage" | "fixed";
+    discountValue: number;
+    code: string;
+  };
 }
 
 export const columns: ColumnDef<OrderColumn>[] = [
@@ -76,9 +84,16 @@ export const columns: ColumnDef<OrderColumn>[] = [
             {row.original.sent}
         </Badge>
      
-      
     </div>
   )
+  },
+  {
+    accessorKey: "coupon.code",
+    header: "Cupom",
+  },
+  {
+    accessorKey: "shippingMethod",
+    header: "Método de envio",
   },
   {
     accessorKey: "createdAt",

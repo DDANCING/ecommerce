@@ -24,7 +24,7 @@ import { useParams, usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { CommandSeparator } from "cmdk";
 import Link from "next/link";
-import { ChevronLeft } from "@/public/ChevronLeft";
+import { ChevronLeft } from "@/public/icons/ChevronLeft";
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>
 

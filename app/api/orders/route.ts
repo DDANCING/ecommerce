@@ -70,6 +70,9 @@ export async function POST(req: Request) {
                 installments: orderData.installments,
                 status: orderData.status,
                 totalAmount: orderData.totalAmount,
+                shippingMethod: orderData.shippingMethod || "N/S", 
+                shippingCost: orderData.shippingCost || 0,
+                couponId: orderData.couponId || null,
             },
         });
 

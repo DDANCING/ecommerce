@@ -46,10 +46,14 @@ export default function CartClient({ user }: CartClientProps) {
   }>(null);
   const [promoCode, setPromoCode] = useState("");
   const [promoApplied, setPromoApplied] = useState(false);
+  const [cupomValido, setCupomValido] = useState<null | {
+  id: string;
+  code: string;
+  discountType: "percentage" | "fixed";
+  discountValue: number;
+}>(null);
   const [isPending, startTransition] = useTransition();
 
-  const TAX_RATE = 0.1;
-  const PROMO_DISCOUNT = 0.2;
   
 
   const subtotal = useMemo(
@@ -57,17 +61,49 @@ export default function CartClient({ user }: CartClientProps) {
     [cart.items]
   );
 
-  const discount = promoApplied ? subtotal * PROMO_DISCOUNT : 0;
+  const discount = promoApplied && cupomValido
+  ? cupomValido.discountType === "percentage"
+    ? subtotal * (cupomValido.discountValue / 100) 
+    : cupomValido.discountValue
+  : 0;
   const deliveryCost = freteSelecionado?.price || 0;
-  const tax = subtotal * TAX_RATE;
-  const total = subtotal - discount + deliveryCost + tax;
+  const total = subtotal - discount + deliveryCost;
+
 
   const formatPrice = (value: number) => formatter.format(value);
 
-  const handleApplyPromo = () => {
-    if (promoCode.trim()) setPromoApplied(true);
-  };
+const handleApplyPromo = async () => {
+  if (!promoCode.trim()) return;
 
+  try {
+    const res = await fetch(`/api/coupons?code=${promoCode}`);
+    if (!res.ok) throw new Error("Cupom inválido");
+
+    const cupom = await res.json();
+
+    // Verifica expiração e limite de uso
+    const agora = new Date();
+    const expiraEm = new Date(cupom.expiresAt);
+    if ((cupom.usageLimit && cupom.usedCount >= cupom.usageLimit) || expiraEm < agora) {
+      alert("Cupom expirado ou limite atingido.");
+      return;
+    }
+
+    setCupomValido({
+      id: cupom.id,
+      code: cupom.code,
+      discountType: cupom.discountType,
+      discountValue: parseFloat(cupom.discountValue),
+    });
+
+    setPromoApplied(true);
+  } catch (err) {
+    console.error("Erro ao aplicar cupom:", err);
+    alert("Cupom inválido ou expirado.");
+    setPromoApplied(false);
+    setCupomValido(null);
+  }
+};
   const buscarFretes = () => {
     if (!cepDestino || cart.items.length === 0) return;
 
@@ -151,25 +187,27 @@ export default function CartClient({ user }: CartClientProps) {
         buyer = await buyerRes.json();
       }
 
-      // 2. Criação do pedido
       const orderRes = await fetch("/api/orders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          buyer,
-          order: {
-            isPaid: false,
-            paymentMethod: "N/S",
-            installments: 1,
-            status: "PENDING",
-            totalAmount: total,
-          },
-          orderItems: cart.items.map((item) => ({
-            productId: item.id,
-            quantity: 1,
-          })),
-        }),
-      });
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        buyer,
+        order: {
+          isPaid: false,
+          paymentMethod: "N/S",
+          installments: 1,
+          status: "PENDING",
+          totalAmount: total,
+          shippingMethod: freteSelecionado.name,
+          shippingCost: freteSelecionado.price, 
+          couponId: cupomValido?.id || null,
+        },
+        orderItems: cart.items.map((item) => ({
+          productId: item.id,
+          quantity: 1,
+        })),
+      }),
+    });
 
       if (!orderRes.ok) {
         const error = await orderRes.text();
@@ -342,9 +380,13 @@ export default function CartClient({ user }: CartClientProps) {
                  Aplicar
                </button>
              </div>
-             {promoApplied && (
-               <p className="text-xs text-emerald-600">20% de desconto aplicado!</p>
-             )}
+             {promoApplied && cupomValido && (
+  <p className="text-xs text-emerald-600">
+    {cupomValido.discountType === "percentage"
+      ? `${cupomValido.discountValue}% de desconto aplicado!`
+      : `Desconto de ${formatPrice(cupomValido.discountValue)} aplicado!`}
+  </p>
+)}
            </div>
    
            {/* Totais */}
@@ -360,10 +402,6 @@ export default function CartClient({ user }: CartClientProps) {
              <div className="flex justify-between">
                <span>Entrega</span>
                <span>{formatPrice(deliveryCost)}</span>
-             </div>
-             <div className="flex justify-between">
-               <span>Taxas</span>
-               <span>{formatPrice(tax)}</span>
              </div>
              <div className="flex justify-between font-semibold pt-2 border-t mt-2">
                <span>Total</span>

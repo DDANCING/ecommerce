@@ -6,20 +6,28 @@ import { OrderColumn } from "./_components/columns";
 import { formatter } from "@/lib/utils";
 
 const OrdersPage = async () => {
-  const orders = await db.order.findMany({
-    orderBy: {
-      createdAt: "desc",
-    },
-    include: {
-      buyer: {
-        select: {
-          fullName: true,
-          email: true,   
-          phone: true,
-        },
+ const orders = await db.order.findMany({
+  orderBy: {
+    createdAt: "desc",
+  },
+  include: {
+    coupon: {
+      select: {
+        id: true,
+        discountType: true,
+        discountValue: true,
+        code: true,
       },
-    }
-  });
+    },
+    buyer: {
+      select: {
+        fullName: true,
+        email: true,
+        phone: true,
+      },
+    },
+  }
+});
 
   const formatedOrders: OrderColumn[] = orders.map((item) => {
   const createdDate = new Date(item.createdAt);
@@ -42,11 +50,27 @@ const OrdersPage = async () => {
     isPaid: item.isPaid,
     method: item.paymentMethod ?? "",
     totalAmount: item.totalAmount
-    ? formatter.format(item.totalAmount.toNumber()) 
-    : "R$ 0,00",
+      ? formatter.format(item.totalAmount.toNumber())
+      : "R$ 0,00",
     sent: item.status ?? "",
     createdAt: dataFormatada,
     installments: item.installments ?? 0,
+    shippingMethod: item.shippingMethod ?? "N/S",
+    shippingCost: item.shippingCost
+      ? item.shippingCost.toNumber?.() ?? item.shippingCost
+      : 0,
+    coupon: {
+      code: item.coupon?.code ?? "N/S",
+      discountType: (item.coupon?.discountType === "fixed" || item.coupon?.discountType === "percentage")
+        ? item.coupon.discountType
+        : "fixed",
+      discountValue: item.coupon?.discountValue
+        ? typeof item.coupon.discountValue === "number"
+          ? item.coupon.discountValue
+          : item.coupon.discountValue.toNumber()
+        : 0,
+      id: item.coupon?.id ?? "",
+    }
   };
 });
 

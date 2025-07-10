@@ -11,11 +11,11 @@ export const Footer = () => {
   <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
     {/* Coluna 1 */}
     <div>
-      <h3 className="text-xl font-semibold mb-2">ATer</h3>
+      <h3 className="text-xl font-semibold mb-2">Logo</h3>
       <p className="text-sm text-gray-400">
-        Rotonda Giuliani 3 Bianco<br />
-        Veneto, 62133 Bergamo (VS)<br />
-        info@ater.com
+        Adress 3<br />
+        Adress, number (VS)<br />
+        marcmaker@outlook.com
       </p>
     </div>
     {/* Coluna 2 */}
@@ -36,7 +36,7 @@ export const Footer = () => {
         Sat - Sun: 8:00 - 21:00<br />
         <br />
         <strong>You need a consult?</strong><br />
-        (+239) 1500-567-8990
+        (+45) 1111-1111
       </p>
     </div>
     {/* Coluna 4 */}

@@ -235,6 +235,11 @@ model Order {
   buyer          Buyer        @relation(fields: [buyerId], references: [id])
   orderItems     OrderItem[]
 
+  couponId       String?      
+  coupon         Coupon?      @relation("OrderCoupon", fields: [couponId], references: [id])
+
+  shippingMethod String? 
+  shippingCost   Decimal?     @default(0)    
   isPaid         Boolean      @default(false)
   paymentMethod  String?
   installments   Int?        
@@ -245,7 +250,9 @@ model Order {
   updatedAt      DateTime     @updatedAt
 
   @@index([buyerId])
+  @@index([couponId])
 }
+
 
 model OrderItem {
   id         String   @id @default(uuid())
@@ -260,6 +267,21 @@ model OrderItem {
   @@index([orderId])
   @@index([productId])
   @@unique([orderId, productId])
+}
+
+model Coupon {
+  id            String   @id @default(uuid())
+  code          String   @unique
+  discountType  String   // 'percentage' ou 'fixed'
+  discountValue Decimal
+  usageLimit    Int?     // Número máximo de vezes que o cupom pode ser usado
+  usedCount     Int      @default(0)
+  expiresAt     DateTime?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  orders        Order[]  @relation("OrderCoupon")
 }
 
 

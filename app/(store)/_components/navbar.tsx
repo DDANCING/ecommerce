@@ -13,6 +13,12 @@ import { ExpandableTabs } from "./ui/expandebla-tabs";
 import { LoginExpandableTabs } from "./ui/login-expandable-tabs";
 import useCart from "@/hooks/use-cart";
 import { logout } from "@/actions/logout";
+import { Blocks } from "@/public/icons/Blocks";
+import { AnimatedCartIcon } from "@/public/icons/AnimatedCartIcon";
+import { Boxes } from "@/public/icons/Boxes";
+import { SwatchBook } from "@/public/icons/SwatchBook";
+import { Heart } from "@/public/icons/Heart";
+import { User } from "@/public/icons/User";
 
 interface UserProps {
   user: {
@@ -44,44 +50,68 @@ export const Navbar = ({ user }: UserProps) => {
   if (!isMounted) return null;
 
   const tabs = [
+     {
+      title: "Produtos",
+      icon: Boxes,
+      href: "/products",
+      content: <Link href="/products">Produtos</Link>,
+    },
     {
-      title: "Início",
-      icon: Home,
-      href: "/",
-      content: <Link href="/">Home</Link>,
+      title: "Categorias",
+      icon: Blocks,
+      href: "/category",
+      content: <Link href="/category">Categorias</Link>,
+    },
+    {
+      title: "Cores",
+      icon: SwatchBook,
+      href: "/color",
+      content: <Link href="/color">Cores</Link>,
     },
     {
       title: `Carrinho (${cart.items.length})`,
-      icon: ShoppingCart,
+      icon: AnimatedCartIcon ,
       href: "/cart",
       content: <Link href="/cart" className="flex gap-1">
       Carrinho
        </Link>,
     },
     {
-      title: "Configurações",
-      icon: Settings,
-      content: "Configurações",
-      onClick: settings.onOpen,
+      title: "Wishlist",
+      icon: Heart,
+      href: "/wishlist",
+      content: <Link href="/wishlist">Wishlist</Link>,
     },
     {
-      title: "Logout",
-      icon: LogOut,
-      content: "Sair",
-      onClick: handleLogout,
+      title: "Perfil",
+      icon: User ,
+      href: "/perfil",
+      content: <Link href="/perfil">Perfil</Link>,
     },
   ];
 
   const loginTabs = [
     {
-      title: "Início",
-      icon: Home,
-      href: "/",
-      content: <Link href="/">Home</Link>,
+      title: "Produtos",
+      icon: Boxes,
+      href: "/products",
+      content: <Link href="/products">Produtos</Link>,
+    },
+    {
+      title: "Categorias",
+      icon: Blocks,
+      href: "/category",
+      content: <Link href="/category">Categorias</Link>,
+    },
+    {
+      title: "Cores",
+      icon: SwatchBook,
+      href: "/color",
+      content: <Link href="/color">Cores</Link>,
     },
      {
       title: `Carrinho (${cart.items.length})`,
-      icon: ShoppingCart,
+      icon: AnimatedCartIcon ,
       href: "/cart",
       content: <Link href="/cart" className="flex gap-1">
       Carrinho

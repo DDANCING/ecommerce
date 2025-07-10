@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import CartClient from "./_components/cart";
+import CartClient from "./_components/cart-client-form";
 
 const CartPage = async () => {
   const user = await auth();

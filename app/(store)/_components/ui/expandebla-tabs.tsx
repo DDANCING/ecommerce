@@ -4,14 +4,17 @@ import * as React from "react";
 import { AnimatePresence, motion, type Transition } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, LucideIcon } from "lucide-react";
 import { RoleGateNoMessage } from "@/components/auth/role-gate";
 import { UserRole } from "@prisma/client";
 import Link from "next/link";
+import { LayoutGrid } from "@/public/icons/LayoutGrid";
+
+
+type IconComponent = React.ComponentType<React.SVGProps<SVGSVGElement> & { size?: number }>;
 
 interface Tab {
   title: string;
-  icon: LucideIcon;
+  icon: IconComponent;
   href?: string;
   onClick?: () => void;
   content?: React.ReactNode;
@@ -101,7 +104,7 @@ export function ExpandableTabs({
             "text-muted-foreground/80 hover:bg-muted hover:text-foreground"
           )}
         >
-          <LayoutDashboard size={20} />
+          <LayoutGrid size={20} />
           <motion.span
             variants={contentVariants}
             initial="initial"

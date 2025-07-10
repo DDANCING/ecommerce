@@ -1,6 +1,7 @@
 import NotFound from "@/app/not-found";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
+import CheckoutClientForm from "./_components/checkout-client-form";
 
 interface CheckoutIdPageProps {
   params: Promise<{ checkoutId: string }>;
@@ -19,26 +20,92 @@ const checkoutPage = async ({ params }: CheckoutIdPageProps) => {
     },
     include: {
       buyer: true,
-    },
+      orderItems: {
+        select: {
+          product: {
+            select: {
+              id: true,
+              sku: true,
+              name: true,
+              price: true,
+              images: true,
+            }
+          },
+          quantity: true,
+        }
+      },
+      coupon: true, // Include the full coupon object
+    }
   });
 
   if (!order) {
-    return NotFound;
+    return NotFound(); 
   }
+
+  // Convert product.price from Decimal to number and images to string[]
+  const orderWithNumberPrice = {
+    ...order,
+    buyer: {
+      ...order.buyer,
+      name: order.buyer.fullName || "", // Map fullName to name as required by BuyerData
+      email: order.buyer.email,
+    },
+    sku:
+      order.orderItems && order.orderItems.length > 0
+        ? (order.orderItems[0].product.sku !== null && order.orderItems[0].product.sku !== undefined
+            ? String(order.orderItems[0].product.sku)
+            : "")
+        : "",
+    totalAmount: typeof order.totalAmount === "number" ? order.totalAmount : Number(order.totalAmount),
+    orderItems: order.orderItems.map((item) => ({
+      ...item,
+      product: {
+        ...item.product,
+        price: typeof item.product.price === "number" ? item.product.price : Number(item.product.price),
+        sku: item.product.sku !== null && item.product.sku !== undefined ? String(item.product.sku) : "",
+        images: Array.isArray(item.product.images)
+          ? item.product.images.map((img) => typeof img === "string" ? img : img.url)
+          : [],
+      },
+    })),
+    shippingMethod: order.shippingMethod === null ? undefined : order.shippingMethod,
+    shippingCost:
+      order.shippingCost === null || order.shippingCost === undefined
+        ? undefined
+        : typeof order.shippingCost === "number"
+        ? order.shippingCost
+        : Number(order.shippingCost),
+    coupon:
+      typeof order.coupon === "undefined" || order.coupon === null
+        ? null
+        : {
+            id: order.coupon.id,
+            discountType:
+              order.coupon.discountType === "fixed" || order.coupon.discountType === "percentage"
+                ? order.coupon.discountType as "fixed" | "percentage"
+                : "fixed", // fallback to "fixed" if not matching
+            discountValue:
+              typeof order.coupon.discountValue === "number"
+                ? order.coupon.discountValue
+                : Number(order.coupon.discountValue),
+            isActive:
+              typeof order.coupon.usageLimit === "undefined" || order.coupon.usageLimit === null
+                ? order.coupon.expiresAt === null ||
+                  new Date(order.coupon.expiresAt) > new Date() // consider coupon active if
+                : // fallback: consider coupon active if not expired and usage limit not reached
+                  (order.coupon.expiresAt === null ||
+                    new Date(order.coupon.expiresAt) > new Date()) &&
+                  (order.coupon.usageLimit === null ||
+                    order.coupon.usedCount < order.coupon.usageLimit),
+          },
+    couponId: typeof order.couponId === "undefined" ? null : order.couponId,
+  };
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4 mt-20">Checkout</h1>
-      <div className=" p-6 rounded-lg shadow-md">
-        <h2 className="text-xl font-semibold mb-4">Order Details</h2>
-        <p><strong>Order ID:</strong> {order.id}</p>
-        <p><strong>Buyer:</strong> {order.buyer.fullName}</p>
-        <p><strong>Email:</strong> {order.buyer.email}</p>
-        <p><strong>Total Amount:</strong> {order.totalAmount ? order.totalAmount.toFixed(2) : "0.00"}</p>
-        <p><strong>Status:</strong> {order.status}</p>
-        
-      </div>
+      <CheckoutClientForm order={orderWithNumberPrice}/>
     </div>
-  )
-}
+  );
+};
+
 export default checkoutPage;
