@@ -9,33 +9,6 @@ Este é um projeto completo de E-commerce desenvolvido com **Next.js 15**, **Aut
 - 💳 Integração com Stripe
 - 🌘 Suporte a temas escuro/claro
 - 📈 Dashboard com gráficos (Recharts)
-- ☁️ Upload de imagens com Next Cloudinary
-
----
-
-## 🚀 Tecnologias e Bibliotecas
-
-- **Next.js 15**  
-- **Auth.js v5**  
-- **Prisma ORM** com PostgreSQL  
-- **Tailwind CSS** + Tailwind Merge + Animate  
-- **Radix UI** (componentes interativos e acessíveis)  
-- **Stripe** (pagamentos online)  
-- **Zod** (validação de formulários)  
-- **React Hook Form**  
-- **Recharts** (dashboard gráfico)  
-- **Cloudinary** (upload e manipulação de imagens)  
-- **Appwrite** (opcional para notificações, storage ou auth alternativa)  
-- **Zustand** (gerenciamento de estado leve)
-
----
-
-## 🧠 Funcionalidades Principais
-
-### 👥 Autenticação
-- Registro, login e logout com Auth.js v5
-- Integração com banco via Prisma Adapter
-- Suporte a múltiplos provedores (ex: OAuth, Email)
 
 ### 🛠️ Dashboard Administrativo
 - Gerenciamento de produtos, categorias e estoque
@@ -56,59 +29,75 @@ Este é um projeto completo de E-commerce desenvolvido com **Next.js 15**, **Aut
 
 ## 🧪 Como Rodar o Projeto
 
-### 1. Clone o repositório
+Siga as instruções abaixo para configurar e executar o projeto em seu ambiente local.
 
-```bash
-git clone https://github.com/seu-usuario/ecommerce.git
-cd ecommerce
+### Pré-requisitos
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+- [Node.js](https://nodejs.org/en/) (versão 18 ou superior)
+- [Bun](https://bun.sh/)
 
+### Instalação
 
+1.  **Clone o repositório:**
+    ```bash
+    git clone https://github.com/seu-usuario/seu-repositorio.git
+    cd seu-repositorio
+    ```
 
-<!-- GETTING STARTED -->
-## Getting Started
+2.  **Instale as dependências:**
+    ```bash
+    bun install
+    ```
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+3.  **Configure as variáveis de ambiente:**
+    Crie um arquivo `.env` na raiz do projeto, copiando o exemplo de `.env.example` (se existir) ou usando as variáveis abaixo.
 
-### Prerequisites
+4.  **Execute as migrações do banco de dados:**
+    Isso irá criar as tabelas no seu banco de dados com base no schema do Prisma.
+    ```bash
+    bunx prisma db push
+    ```
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+5.  **Inicie o servidor de desenvolvimento:**
+    ```bash
+    bun dev
+    ```
 
-### Installation
+A aplicação estará disponível em [http://localhost:3000](http://localhost:3000).
 
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
+## Variáveis de Ambiente
 
-1. Clone the repo
-   ```sh
-   git clone https://github.com/DDANCING/ProjectA.git
-   ```
-2. Install NPM packages
-   ```sh
-   npm install
-   ```
-3. Run project
-   ```sh
-   npm run dev
-   ```
+Para que a aplicação funcione corretamente, você precisa configurar as seguintes variáveis no seu arquivo `.env`:
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+```env
+# URL do Banco de Dados (Ex: PostgreSQL, MySQL, etc.)
+# Usado pelo Prisma para conectar ao banco.
+DATABASE_URL="postgresql://user:password@host:port/database?sslmode=require"
 
+# URL da sua aplicação, usado pelo NextAuth.js
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
 
+# Segredo para o NextAuth.js. Gere um com `openssl rand -base64 32`
+NEXTAUTH_SECRET="seu-segredo-aqui"
+NEXTAUTH_URL="http://localhost:3000/api/auth"
 
-<!-- USAGE EXAMPLES -->
-## Usage
+# Chaves da API do Stripe
+STRIPE_API_KEY="sk_test_..."
+STRIPE_WEBHOOK_SECRET="whsec_..."
 
-Create your account and navigate through the various sections of the code. If you wish to visit the teachers' section, please contact me at (45) 998405219.
+# (Opcional) Configuração para envio de emails (ex: Resend)
+RESEND_API_KEY="seu-api-key"
+```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+## Estrutura do Projeto
 
-
+- **/app**: Contém as rotas, layouts e páginas da aplicação (usando o App Router do Next.js).
+- **/actions**: Funções server-side (Server Actions) para mutações de dados.
+- **/components**: Componentes React reutilizáveis, incluindo componentes de UI da `shadcn/ui`.
+- **/lib**: Funções utilitárias, configuração de clientes (Stripe, Prisma) e lógica de autenticação.
+- **/prisma**: Schema do banco de dados (`schema.prisma`) e migrações.
+- **/hooks**: Hooks React customizados para lógica de estado e outras funcionalidades.
+- **/schemas**: Esquemas de validação com Zod.
 
 <!-- ROADMAP -->
 ## Roadmap

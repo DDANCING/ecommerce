@@ -19,7 +19,6 @@ export async function GET(
     const product = await db.product.findUnique({
       where: {
         id: productId,
-       
       },
       include: {
         images: true,
@@ -38,12 +37,26 @@ export async function GET(
 
 export async function PATCH(
   req: Request,
-  context: { params: Promise<{ storeId: string, productId: string }> }
+  context: { params: Promise<{ storeId: string; productId: string }> }
 ) {
   try {
     const userId = await useUserId(req);
     const body = await req.json();
-    const { name, price, categoryId, colorId, sizeId, images, isFeatured, isArchived  } = body; 
+    const {
+  name,
+  price,
+  originalPrice,
+  sku,
+  rating,
+  reviewCount,
+  description,
+  categoryId,
+  colorId,
+  sizeId,
+  images,
+  isFeatured,
+  isArchived,
+} = body;
     const { productId, storeId } = await context.params;
 
     if (!userId) {
@@ -52,70 +65,76 @@ export async function PATCH(
     if (!name) {
       return new NextResponse("Name is required", { status: 400 });
     }
-   if (!images || !images.length) {
-        return new NextResponse("image are required", {status: 400});
-    } 
+    if (!images || !images.length) {
+      return new NextResponse("Images are required", { status: 400 });
+    }
     if (!productId) {
-        return new NextResponse("Product id is required", {status: 400});
+      return new NextResponse("Product id is required", { status: 400 });
     }
     if (!price) {
       return new NextResponse("Price is required", { status: 400 });
     }
     if (!categoryId) {
-        return new NextResponse("Category id is required", {status: 400});
+      return new NextResponse("Category id is required", { status: 400 });
     }
     if (!colorId) {
-        return new NextResponse("Color id is required", {status: 400});
-    }  
-    if (!sizeId) {
-        return new NextResponse("Size id is required", {status: 400});
-    } 
-    
-
-       const storeByUserId = await db.store.findFirst({
-        where: {
-            id: storeId,
-            userId,
-        }
-    });
-
-    if(!storeByUserId) {
-        return new NextResponse("Unauthorized", {status: 403});
+      return new NextResponse("Color id is required", { status: 400 });
     }
-    
+    if (!sizeId) {
+      return new NextResponse("Size id is required", { status: 400 });
+    }
 
-    await db.product.update({
+    const storeByUserId = await db.store.findFirst({
       where: {
-        id: productId,
-      },
-      data: {
-       name,
-       price,
-       categoryId,
-       colorId,
-       sizeId,
-       images: {
-        deleteMany: {}
-       },
-       isFeatured,
-       isArchived,
+        id: storeId,
+        userId,
       },
     });
 
-    const product = await db.product.update({
+    if (!storeByUserId) {
+      return new NextResponse("Unauthorized", { status: 403 });
+    }
+
+ 
+    const product = await db.$transaction(async (tx) => {
+      
+      await tx.product.update({
       where: {
         id: productId,
       },
       data: {
+        name,
+        price,
+        originalPrice,
+        sku,
+        rating,
+        reviewCount,
+        description,
+        categoryId,
+        colorId,
+        sizeId,
         images: {
-          createMany: {
-            data: [
-              ...images.map((image: { url: string}) => image)
-            ]
-          }
-        }
-      }
-    })
+          deleteMany: {},
+        },
+        isFeatured,
+        isArchived,
+      },
+    });
+
+      // Depois cria as novas imagens
+      return await tx.product.update({
+        where: {
+          id: productId,
+        },
+        data: {
+          images: {
+            createMany: {
+              data: images.map((image: { url: string }) => image),
+            },
+          },
+        },
+      });
+    });
 
     return NextResponse.json(product);
   } catch (error) {

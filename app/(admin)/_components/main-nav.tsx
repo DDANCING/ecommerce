@@ -25,15 +25,11 @@ export function MainNav({ className, ...props }: React.HTMLAttributes<HTMLElemen
 
   if (pathname?.startsWith("/dashboard/store")) {
     routes = [
-      {
-        href: `/dashboard/store/${params.storeId}/overview`,
-        label: "Overview",
-        active: pathname === `/dashboard/store/${params.storeId}/overview`
-      },
+     
       {
         href: `/dashboard/store/${params.storeId}/products`,
         label: "Produtos",
-        active: pathname === `/dashboard/store/${params.storeId}/Products`
+        active: pathname === `/dashboard/store/${params.storeId}/products`
       },
       {
         href: `/dashboard/store/${params.storeId}/billboards`,
@@ -62,12 +58,27 @@ export function MainNav({ className, ...props }: React.HTMLAttributes<HTMLElemen
       },
       
     ];
-  } else if (pathname === "/dashboard") {
+  } else if (pathname?.startsWith("/dashboard")) {
     routes = [
       {
         href: "/dashboard",
-        label: "Overview",
+        label: "Dashboard",
         active: pathname === "/dashboard"
+      },
+      {
+        href: "/dashboard/overview",
+        label: "Overview",
+        active: pathname === "/dashboard/overview"
+      },
+      {
+        href: "/dashboard/orders",
+        label: "Pedidos",
+        active: pathname === "/dashboard/orders"
+      },
+      {
+        href: "/dashboard/buyers",
+        label: "Clientes",
+        active: pathname === "/dashboard/buyers"
       }
     ];
   }

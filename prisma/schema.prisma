@@ -20,6 +20,7 @@ model User {
   accounts              Account[]
   twoFactorConfirmation TwoFactorConfirmation?
   stores                Store[]
+  wishlists             Wishlist[]
 }
 
 model Account {
@@ -73,6 +74,15 @@ model TwoFactorConfirmation {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model Visitor {
+  id         String   @id @default(uuid())
+  date       DateTime @unique
+  mobile     Int      @default(0)
+  web        Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
 model Store {
   id         String       @id @default(uuid())
   name       String
@@ -90,16 +100,31 @@ model Store {
 }
 
 model Billboard {
-  id         String  @id @default(uuid())
-  storeId    String
-  store      Store   @relation("StoreToBillboard", fields: [storeId], references: [id])
-  label      String
-  imageUrl   String
-  categories Category[]
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id              String        @id @default(uuid())
+  storeId         String
+  store           Store         @relation("StoreToBillboard", fields: [storeId], references: [id])
+  label           String
+  subtitle        String?
+  category        String?
+  description     String?
+  imageUrl        String
+
+  callToActionId  String?       @unique
+  callToAction    CallToAction? @relation(fields: [callToActionId], references: [id])
+
+  categories      Category[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 
   @@index([storeId])
+}
+
+model CallToAction {
+  id        String     @id @default(uuid())
+  text      String?
+  href      String?
+
+  billboard Billboard?
 }
 
 model Category {
@@ -145,19 +170,26 @@ model Color {
 
 model Product {
   id String @id @default(uuid())
+  sku Int?
   storeId String
   store Store @relation("StoreToProduct", fields: [storeId], references: [id])
   categoryId String
   category Category @relation("CategoryToProduct", fields: [categoryId], references: [id])
   name String
   price Decimal
+  originalPrice Decimal?
+  rating Int?
+  description String?
+  reviewCount Int?
   isFeatured Boolean @default(false)
   isArchived Boolean @default(false)
   sizeId String
   size Size @relation(fields: [sizeId], references: [id])
   colorId String
   color Color @relation(fields: [colorId], references: [id])
+  orderItems OrderItem[]
   images Image[]
+  wishlists Wishlist[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -168,15 +200,105 @@ model Product {
 }
 
 model Image {
-  id String @id @default(uuid())
+  id        String @id @default(uuid())
   productId String
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-  url String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([productId])
 }
+
+model Buyer {
+  id           String   @id @default(uuid())
+  fullName     String
+  document     String?   @db.VarChar(18) @unique
+  email        String   @unique
+  phone        String?
+
+  address      String?
+  number       String?
+  complement   String?
+  neighborhood String?
+  city         String?
+  state        String?
+  cep          String?  @db.VarChar(9)
+
+  orders       Order[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Order {
+  id             String       @id @default(uuid())
+
+  buyerId        String
+  buyer          Buyer        @relation(fields: [buyerId], references: [id])
+  orderItems     OrderItem[]
+
+  couponId       String?      
+  coupon         Coupon?      @relation("OrderCoupon", fields: [couponId], references: [id])
+
+  shippingMethod String? 
+  shippingCost   Decimal?     @default(0)    
+  isPaid         Boolean      @default(false)
+  paymentMethod  String?
+  installments   Int?        
+  status         String?
+  totalAmount    Decimal?
+
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([buyerId])
+  @@index([couponId])
+}
+
+
+model OrderItem {
+  id         String   @id @default(uuid())
+  orderId    String
+  order      Order    @relation(fields: [orderId], references: [id])
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id])
+  quantity   Int      @default(1)
+  unitPrice  Decimal  
+  subtotal   Decimal 
+
+  @@index([orderId])
+  @@index([productId])
+  @@unique([orderId, productId])
+}
+
+model Coupon {
+  id            String   @id @default(uuid())
+  code          String   @unique
+  discountType  String   // 'percentage' ou 'fixed'
+  discountValue Decimal
+  usageLimit    Int?     // Número máximo de vezes que o cupom pode ser usado
+  usedCount     Int      @default(0)
+  expiresAt     DateTime?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  orders        Order[]  @relation("OrderCoupon")
+}
+
+model Wishlist {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
+  @@index([userId])
+  @@index([productId])
+}
+
 
 enum UserRole {
   ADMIN

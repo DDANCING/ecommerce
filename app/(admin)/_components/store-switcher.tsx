@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, ChevronsUpDown, PlusCircle, Store as StoreIcon } from "lucide-react"
+import { ArrowLeft, Check, ChevronsUpDown, PlusCircle, Store as StoreIcon } from "lucide-react"
  
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -17,12 +17,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { TypeOf } from "zod";
+
 import { Store } from "@prisma/client";
 import { useStoreModal } from "@/hooks/use-store-modal";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { CommandSeparator } from "cmdk";
+import Link from "next/link";
+import { ChevronLeft } from "@/public/icons/ChevronLeft";
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>
 
@@ -38,6 +40,7 @@ export default function StoreSwitcher({
 const storeModal = useStoreModal();
 const params = useParams();
 const router = useRouter();
+const pathname = usePathname();
 
 const formattedItems = items.map((item) => ({
     label: item.name,
@@ -48,12 +51,21 @@ const currentStore = formattedItems.find((item) => item.value === params.storeId
 
 const [open, setOpen] = useState(false)
 
+
 const onStoreSelect = (store: { value: string, label: string}) => {
     setOpen(false)
-    router.push(`/dashboard/store/${store.value}`)
+    router.push(`/dashboard/store/${store.value}/products`)
 }
 
     return (
+        <>
+        {pathname?.startsWith("/dashboard/store") &&
+        <Link
+        href="/dashboard"
+        >
+        <ChevronLeft className="mx-5 text-muted-foreground hover:text-primary"/> 
+        </Link>
+        }
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
               <Button
@@ -65,7 +77,7 @@ const onStoreSelect = (store: { value: string, label: string}) => {
                 className={cn("w-[200px] justify-between", className)}
               >
                 <StoreIcon className="mr-2 h-4 w-4" />
-                {currentStore?.label || "Selecione a loja"}
+                {currentStore?.label || "Selecione uma loja"}
                 <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 text-muted-foreground" />
               </Button>
             </PopoverTrigger>
@@ -101,5 +113,6 @@ const onStoreSelect = (store: { value: string, label: string}) => {
                 </Command>
             </PopoverContent>            
         </Popover>
+        </>
     );
 };

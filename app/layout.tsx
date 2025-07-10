@@ -8,7 +8,6 @@ import NextTopLoader from 'nextjs-toploader';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
-import { SettingsModalProvider } from "@/providers/profile-settings-provider";
 
 
 const montserrat = Montserrat({ subsets: ["latin"] });
@@ -27,7 +26,7 @@ export default async function RootLayout({
 
   return (
   <SessionProvider session={session}>
-      <html lang="en" suppressHydrationWarning>
+      <html lang="pt-br" suppressHydrationWarning>
         <body className={montserrat.className}>
           <NextTopLoader
             color="#fafafa"
@@ -48,7 +47,6 @@ export default async function RootLayout({
           >
             
             {children}
-         <SettingsModalProvider/>  
          <SpeedInsights />
             <Toaster />
           </ThemeProvider>

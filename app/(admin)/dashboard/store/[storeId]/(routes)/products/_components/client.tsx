@@ -33,7 +33,7 @@ export const ProductClient: React.FC<ProductClientProps> = ({
       />
       <Button onClick={() => router.push(`/dashboard/store/${params.storeId}/products/new`)}>
         <PlusIcon className="mr-2 h-4 w-4"/>
-        Novo outdoor
+        Novo produto
       </Button>
     </div>
     <Separator/>

@@ -1,9 +1,28 @@
+import { getDashboardCards } from "@/actions/getDashboardCards";
+import { ChartAreaInteractive } from "@/app/(admin)/dashboard/_components/ChartAreaInteractive";
+import { SectionCards } from "@/app/(admin)/dashboard/_components/section-cards"
+
+
+
+
+ const cards = await getDashboardCards();
 
 function DashboardStorePage() {
   return (
-    <div>
-        this is a dashboard
-    </div>
+
+     
+        <div className="flex flex-1 flex-col">
+          <div className="@container/main flex flex-1 flex-col gap-2">
+            <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+              <SectionCards  cards={cards}/>
+              <div className="px-4 lg:px-6 ">
+              <ChartAreaInteractive/>
+              </div>
+          
+            </div>
+          </div>
+        </div>
+
   )
 }
 
