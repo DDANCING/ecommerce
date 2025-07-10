@@ -4,6 +4,8 @@ import { getProductWithSuggestions } from "@/actions/getProductWithSuggestions";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
+import { auth } from "@/auth";
+import { db } from "@/lib/db";
 
 interface CategoryIdPageProps {
   params: Promise<{ productId: string }>;
@@ -11,6 +13,17 @@ interface CategoryIdPageProps {
 
 const page = async ({ params }: CategoryIdPageProps) => {
   const { productId } = await params;
+
+  const user = await auth();
+
+const wishlistItems = await db.wishlist.findMany({
+  where: {
+    userId: user?.user.id,
+    productId: productId,
+  },
+});
+
+const isInWishlist = wishlistItems.length > 0;
 
   const { product, suggestedProducts } = await getProductWithSuggestions(productId);
 
@@ -41,20 +54,22 @@ const page = async ({ params }: CategoryIdPageProps) => {
           </div>
         </Card>
 
-        <ProductClient
-          product={product}
-          suggestedProducts={suggestedProducts}
-        />
+       <ProductClient
+  wishlist={isInWishlist}
+  product={product}
+  suggestedProducts={suggestedProducts}
+/>
       </div>
     );
   }
 
   return (
     <div className="mt-20">
-      <ProductClient
-        product={product}
-        suggestedProducts={suggestedProducts}
-      />
+    <ProductClient
+  wishlist={isInWishlist}
+  product={product}
+  suggestedProducts={suggestedProducts}
+/>
     </div>
   );
 };

@@ -15,7 +15,7 @@ const heartVariants: Variants = {
     },
   }),
   animate: (i: number) => ({
-    scale: 1.12,
+    scale: 1.20,
     opacity: 1,
     transition: {
       type: "spring",

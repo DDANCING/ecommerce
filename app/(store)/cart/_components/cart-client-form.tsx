@@ -227,10 +227,10 @@ const handleApplyPromo = async () => {
   return (
    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-25 m-5">
          {/* Cart items */}
-         <section className="lg:col-span-8 space-y-4">
+         <section className="lg:col-span-8 space-y-4 border rounded-2xl p-4">
            <h2 className="text-lg font-bold">Carrinho</h2>
            {cart.items.length === 0 && (
-             <p className="text-muted-foreground">Seu carrinho está vazio.</p>
+             <p className="text-muted-foreground text-center mt-40">Seu carrinho está vazio.</p>
            )}
            {cart.items.map((item) => (
              <div key={item.id} className="flex items-start gap-4 p-4 border rounded-lg">
@@ -269,7 +269,7 @@ const handleApplyPromo = async () => {
          </section>
    
          {/* Summary */}
-         <aside className="lg:col-span-4 space-y-6">
+         <aside className="lg:col-span-4 space-y-6 border rounded-2xl p-4">
            <h2 className="text-lg font-semibold">Resumo</h2>
    
            {/* Entrega */}

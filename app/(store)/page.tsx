@@ -4,25 +4,42 @@ import { db } from "@/lib/db";
 import { registerVisitor } from "@/actions/register-visitor";
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
+import { auth } from "@/auth";
 
 export default async function Home() {
   const { billboardData } = await getBillboardData();
   await registerVisitor();
 
-  const categories = await db.category.findMany({
-    include: {
-      billboard: {
-        select: {
-          imageUrl: true,
-        },
-      },
-    },
-  });
+  const user = await auth();
+
+
+const billboardProductIds = Array.isArray(billboardData)
+  ? billboardData.map(b => b.highlightProduct?.id).filter(Boolean)
+  : [];
+
+const wishlistItems = await db.wishlist.findMany({
+  where: {
+    userId: user?.user.id,
+    productId: { in: billboardProductIds },
+  },
+});
+
+const wishlistProductIds = new Set(wishlistItems.map(item => item.productId));
+
+const billboardWithWishlist = billboardData.map((item) => ({
+  ...item,
+  highlightProduct: item.highlightProduct
+    ? {
+        ...item.highlightProduct,
+        isInWishlist: wishlistProductIds.has(item.highlightProduct.id),
+      }
+    : null,
+}));
 
   return (
     <div className="w-full flex flex-col items-center justify-center overflow-x-hidden">
       <div className="z-0">
-      <Billboard data={billboardData} />
+      <Billboard data={billboardWithWishlist} />
      </div>
       {/* Seção de produtos em destaque */}
       <section className="w-full px-6 py-16 mx-20 bg-background rounded-t-4xl z-10">
@@ -34,7 +51,7 @@ export default async function Home() {
           {["PRODUTO EXEMPLO 1", "PRODUTO EXEMPLO 2", "PRODUTO EXEMPLO 3"].map((title, i) => (
             <div key={i} className="bg-foreground rounded-2xl shadow-md overflow-hidden">
               <Image
-                src={`https://placehold.co/600x400?text=Produto+${i + 1}`}
+                src={`https://placehold.co/600x400`}
                 alt={title}
                 width={600}
                 height={400}

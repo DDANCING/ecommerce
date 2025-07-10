@@ -13,6 +13,7 @@ export default async function ColorPage({ params }: ColorIdPageProps) {
 const products = await db.product.findMany({
  where: {
   colorId,
+  isArchived: false,
  },
  include: {
    category: {

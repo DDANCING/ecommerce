@@ -1,45 +1,36 @@
-"use client";
+"use client"
 
-import { settings } from "@/actions/settings";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { useCurrentUser } from "@/data/hooks/use-current-user";
-import { SettingsSchema } from "@/schemas";
+import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useSession } from "next-auth/react";
-import { useState, useTransition } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import z from "zod";
-import UrlTabs from "../urltabs";
+import { useForm } from "react-hook-form"
+import { SettingsSchema } from "@/schemas";
+import { settings } from "@/actions/settings";
 
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { useTransition, useState } from "react";
+import { Input } from "@/components/ui/input";
+
+import { TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useCurrentUser } from "@/data/hooks/use-current-user";
+
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { SyncLoader } from "react-spinners";
-import { ModeToggle } from "../ui/mode-toggle";
-import { Switch } from "../ui/switch";
-import { cn } from "@/lib/utils";
-import { Modal } from "../modal";
-import { useSettingsModal } from "@/hooks/use-settings-modal";
-import { TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { toast } from "sonner";
+import { Switch } from "@/components/ui/switch";
+import { useSession } from "next-auth/react";
 
-export const SettingsModal = () => {
+import { cn } from "@/lib/utils";
+import UrlTabs from "@/components/urltabs";
+
+
+export const Settings = () => {
 const [error, setError] = useState<string | undefined>(); 
 const [success, setSuccess] = useState<string | undefined>();   
 const [isPending, startTransition] = useTransition();
 const user =  useCurrentUser();
 const { update } = useSession();
-const settingsModal = useSettingsModal();
+
 
 const form = useForm<z.infer<typeof SettingsSchema>>({
   resolver: zodResolver(SettingsSchema),
@@ -61,8 +52,8 @@ const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
       toast(data.error, {
         
         action: {
-          label: "Close",
-          onClick: () => console.log("Undo"),
+          label: "Fechar",
+          onClick: () => console.log("Fechar"),
         },
       })
     }
@@ -70,48 +61,44 @@ const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
     if (data.success) {
       update(); 
       setSuccess(data.success);
-      toast(data.success, {
-        
+      toast(success, {
+      
         action: {
-          label: "Close",
-          onClick: () => console.log("Undo"),
+          label: "Fechar",
+          onClick: () => console.log("Fechar"),
         },
       })
     }
     
    })
-   .catch(() => setError("Something went wrong!"));
-   
+   .catch(() => setError("Algo deu errado!"));
+   toast(error)
   });
 }
 
   return (
-   <Modal 
-       title="Editar perfil"
-       description=""
-       isOpen={settingsModal.isOpen}
-       onClose={settingsModal.onClose}
-       >
-      
-         <div className="flex h-full w-full">
+    <main className=" flex rounded-sm h-screen justify-between">
+    <div className="flex h-full w-full bg-background">
     <UrlTabs defaultValue="account">
       <TabsList className={cn(
-        "grid w-full grid-cols-3 bg-background",
-        user?.isOAuth !== false && "grid w-full grid-cols-3"
+        "grid w-full grid-cols-2",
+        user?.isOAuth !== false && "grid w-full grid-cols-1"
       )}
       >  
         <TabsTrigger value="account">Conta</TabsTrigger>
         {user?.isOAuth === false &&(
         <TabsTrigger value="password">Senha</TabsTrigger>
         )}
-        <TabsTrigger value="configs">Preferências</TabsTrigger>
       </TabsList>
-      <TabsContent value="account" className="bg-transparent">
-        <Card className="bg-gradient-to-b from-muted/30 via-background/30 to-background/30 backdrop-blur-md border-none">
+      <TabsContent value="account">
+        <Card className="shadow-none bg-background">
           <CardHeader>
-            
+            <CardTitle>Conta</CardTitle>
+            <CardDescription>
+              Faça alterações na sua conta aqui. Clique em salvar quando terminar.
+            </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-2">
+          <CardContent className="space-y-2 bg-background">
           
           <Form {...form}>
             <form 
@@ -135,6 +122,7 @@ const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
             </FormItem>
             )}
               />
+
               {user?.isOAuth === false &&(
               <FormField
               control={form.control}
@@ -152,6 +140,7 @@ const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
             </FormItem>
             )}
               />
+              
             )} 
               {user?.isOAuth === false && (
               <FormField
@@ -160,11 +149,11 @@ const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
               render={({ field }) => (
             <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
               <div className="space-y-0.5">
-  <FormLabel>Autenticação em Dois Fatores</FormLabel>
-  <FormDescription>
-    Ative a autenticação em dois fatores para sua conta
-  </FormDescription>
-</div>
+                <FormLabel>  Autenticação em Duas Etapas  </FormLabel>
+                <FormDescription>
+                  Ative a autenticação em duas etapas para sua conta.
+                </FormDescription>
+              </div>
               <FormControl>
                 <Switch 
                 disabled={isPending}
@@ -177,40 +166,30 @@ const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
               />
           )}
            </div>
-           <DialogFooter className="border-t border-border px-6 py-4">
-          <DialogClose asChild>
-            <Button type="button" variant="outline">
-              Cancelar
-            </Button>
-          </DialogClose>
-           <Button  disabled={isPending} type="submit" > 
-            {isPending? <SyncLoader size={6}/> : "Salvar"}
-           </Button>
-        </DialogFooter>
-          
+           
             </form>
           </Form>
-          
           </CardContent>
           <CardFooter>
-           
+            <Button variant={"default"} disabled={isPending} type="submit" className="flex box-content"> 
+            {isPending? <SyncLoader size={9} color="#ffffff"/> : "Salvar"}
+           </Button>
           </CardFooter>
         </Card>
       </TabsContent>
       {user?.isOAuth === false &&(
       <TabsContent value="password">
-        
+      
       <Form {...form}>
             <form 
             className="space-y-6" 
             onSubmit={form.handleSubmit(onSubmit)}
             >
               <div className="space-y-4" >
-            <Card className="bg-gradient-to-b from-muted/30 via-background/30 to-background/30 backdrop-blur-md border-none p-4"> 
+            <Card className="p-6 shadow-none bg-background"> 
                 <>
               <FormField
               control={form.control}
-              
               name="password"
               render={({ field }) => (
             <FormItem>
@@ -231,7 +210,7 @@ const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
               name="newPassword"
               render={({ field }) => (
             <FormItem>
-              <FormLabel> Nova senha </FormLabel>
+              <FormLabel> Nova Senha </FormLabel>
               <FormControl>
                 <Input
                 {...field}
@@ -244,44 +223,20 @@ const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
             </FormItem>
             )}
               />
-              </>
-               <DialogFooter className="border-t border-border px-6 py-4">
-          <DialogClose asChild>
-            <Button type="button" variant="outline">
-              Cancelar
-            </Button>
-          </DialogClose>
-            <Button disabled={isPending} type="submit" > 
-            {isPending? <SyncLoader size={6} /> : "Mudar senha"}
+               <Button variant={"default"} disabled={isPending} type="submit" className="flex w-32"> 
+            {isPending? <SyncLoader size={9} color="#ffffff"/> : "Alterar senha"}
            </Button>
-        </DialogFooter>
+              </>
+              
               </Card> 
               
            </div>
           
-           
             </form>
           </Form>
       </TabsContent>
  )} 
-      <TabsContent value="configs">
-        <Card className="bg-gradient-to-b from-muted/30 via-background/30 to-background/30 backdrop-blur-md border-none p-4">
-          <CardHeader>
-            <CardTitle>Preferências</CardTitle>
-            <CardDescription>
-              
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-           <ModeToggle/>
-          </CardContent>
-        
-        </Card>
-      </TabsContent>
-    
-    
       </UrlTabs>
     </div>
-      </Modal>
-  );
-}
+    </main>
+  )}

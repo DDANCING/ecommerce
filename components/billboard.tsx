@@ -13,9 +13,11 @@ import {
 import ProductCard from "@/app/(store)/_components/ui/product-card";
 import { motion } from "framer-motion";
 import { slideInLeft } from "@/lib/animations";
+import { Button } from "./ui/button";
+import Link from "next/link";
 
 interface BillboardCarouselProps {
-  data: (Billboard & { highlightProduct?: StoreProduct | null })[];
+  data: (Billboard & { highlightProduct?: (StoreProduct & { isInWishlist?: boolean }) | null })[];
 }
 
 const BillboardCarousel: React.FC<BillboardCarouselProps> = ({ data }) => {
@@ -56,14 +58,24 @@ const BillboardCarousel: React.FC<BillboardCarouselProps> = ({ data }) => {
                   <motion.div
                     {...slideInLeft}
                     transition={{ delay: 0.5 }}
-                    className="hidden md:flex absolute top-1/4 left-20 z-10"
+                    className="hidden md:flex absolute top-1/2 right-20 z-10"
                   >
-                    <ProductCard product={billboard.highlightProduct} />
+                    <ProductCard
+                    initialInWishlist={billboard.highlightProduct.isInWishlist}
+                    size={0.7}
+                    product={billboard.highlightProduct}
+                  />
                   </motion.div>
                 )}
 
-                <div className="absolute bottom-2 z-20 bg-background/80 px-3 py-1 rounded">
-                  <p className="text-md mt-2">{`${current + 1}/${data.length}`}</p>
+                <div className="absolute top-4 z-20 px-3 py-1 mt-20">
+                  <p className="font-bold text-4xl text-background/80"> {billboard.subtitle} </p>
+                  <p className="text-1xl text-background/80"> {billboard.description} </p>
+                  <Link href={"/products"}>
+                  <Button variant={"secondary"} className="mt-4 rounded-full">
+                    Descubra mais
+                  </Button>
+                  </Link>
                 </div>
               </div>
             </CarouselItem>

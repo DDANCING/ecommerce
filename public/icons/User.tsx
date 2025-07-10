@@ -4,25 +4,26 @@ import * as React from "react";
 import { motion, useAnimation } from "framer-motion";
 import type { Variants } from "framer-motion";
 
-const userVariants: Variants = {
-  normal: (i: number) => ({
+const pathVariant: Variants = {
+  normal: { pathLength: 1, opacity: 1, pathOffset: 0 },
+  animate: {
+    pathLength: [0, 1],
+    opacity: [0, 1],
+    pathOffset: [1, 0],
+  },
+};
+
+const circleVariant: Variants = {
+  normal: {
+    pathLength: 1,
+    pathOffset: 0,
     scale: 1,
-    opacity: 1,
-    transition: {
-      type: "spring",
-      stiffness: 300,
-      damping: 25,
-    },
-  }),
-  animate: (i: number) => ({
-    scale: 1.12,
-    opacity: 1,
-    transition: {
-      type: "spring",
-      stiffness: 300,
-      damping: 25,
-    },
-  }),
+  },
+  animate: {
+    pathLength: [0, 1],
+    pathOffset: [1, 0],
+    scale: [0.5, 1],
+  },
 };
 
 export interface UserProps extends React.SVGProps<SVGSVGElement> {
@@ -44,6 +45,7 @@ export const User = React.forwardRef<SVGSVGElement, UserProps>(
   ) => {
     const controls = useAnimation();
 
+
     return (
       <svg
         ref={ref}
@@ -64,18 +66,20 @@ export const User = React.forwardRef<SVGSVGElement, UserProps>(
         <motion.circle
           cx="12"
           cy="8"
-          r="5.5"
-          variants={userVariants}
-          animate={controls}
+          r="5"
           initial="normal"
-          custom={0}
+          animate={controls}
+          variants={circleVariant}
         />
         <motion.path
           d="M20 21a8 8 0 0 0-16 0"
-          variants={userVariants}
-          animate={controls}
           initial="normal"
-          custom={1}
+          animate={controls}
+          variants={pathVariant}
+          transition={{
+            delay: 0.2,
+            duration: 0.4,
+          }}
         />
       </svg>
     );

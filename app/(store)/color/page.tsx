@@ -7,7 +7,9 @@ export default async function ColorsPage() {
   const color = await db.color.findMany({
     where: {
       products: {
-        some: {},
+        some: {
+          isArchived: false,
+        },
       },
     },
   });

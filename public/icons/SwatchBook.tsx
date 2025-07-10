@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { motion, useAnimation } from "framer-motion";
-import type { Variants } from "framer-motion";
 
 export interface SwatchBookProps extends React.SVGProps<SVGSVGElement> {
   size?: number;
@@ -10,45 +9,48 @@ export interface SwatchBookProps extends React.SVGProps<SVGSVGElement> {
   stroke?: string;
 }
 
-const swatchVariants: Variants = {
-  normal: (i: number) => ({
+const mainSwatchVariants = {
+  normal: {
     x: 0,
-    y: 0,
     transition: {
-      type: "spring",
+      type: "spring" as const,
       stiffness: 300,
       damping: 25,
     },
-  }),
-  animate: (i: number) => {
-    // Animation offsets for each swatch path
-    const positions = [
-      { x: 6, y: -2 },
-      { x: 0, y: 5 },
-      { x: -6, y: 0 },
-    ];
-    return {
-      ...positions[i],
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 25,
-      },
-    };
+  },
+  animate: {
+    x: 4,
+    transition: {
+      type: "spring" as const,
+      stiffness: 300,
+      damping: 25,
+    },
+  },
+};
+
+const mergingVariants = {
+  normal: {
+    x: 0,
+    opacity: 1,
+    transition: {
+      type: "spring" as const,
+      stiffness: 300,
+      damping: 25,
+    },
+  },
+  animate: {
+    x: -8,
+    opacity: 0,
+    transition: {
+      type: "spring" as const,
+      stiffness: 300,
+      damping: 25,
+    },
   },
 };
 
 export const SwatchBook = React.forwardRef<SVGSVGElement, SwatchBookProps>(
-  (
-    {
-      size = 28,
-      strokeWidth = 2,
-      stroke = "currentColor",
-      className,
-      ...props
-    },
-    ref
-  ) => {
+  ({ size = 28, strokeWidth = 2, stroke = "currentColor", className, ...props }, ref) => {
     const controls = useAnimation();
 
     return (
@@ -68,26 +70,25 @@ export const SwatchBook = React.forwardRef<SVGSVGElement, SwatchBookProps>(
         onMouseLeave={() => controls.start("normal")}
         {...props}
       >
-        {[
-          "M11 17a4 4 0 0 1-8 0V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2Z",
-          "M16.7 13H19a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H7",
-          "m11 8 2.3-2.3a2.4 2.4 0 0 1 3.404.004L18.6 7.6a2.4 2.4 0 0 1 .026 3.434L9.9 19.8",
-        ].map((d, i) => (
-          <motion.path
-            key={i}
-            d={d}
-            variants={swatchVariants}
-            animate={controls}
-            initial="normal"
-            custom={i}
-          />
-        ))}
+        <motion.path
+          d="M11 17a4 4 0 0 1-8 0V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2Z"
+          variants={mainSwatchVariants}
+          animate={controls}
+        />
         <motion.path
           d="M7 17h.01"
-          variants={swatchVariants}
+          variants={mainSwatchVariants}
           animate={controls}
-          initial="normal"
-          custom={2}
+        />
+        <motion.path
+          d="M16.7 13H19a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H7"
+          variants={mergingVariants}
+          animate={controls}
+        />
+        <motion.path
+          d="m11 8 2.3-2.3a2.4 2.4 0 0 1 3.404.004L18.6 7.6a2.4 2.4 0 0 1 .026 3.434L9.9 19.8"
+          variants={mergingVariants}
+          animate={controls}
         />
       </svg>
     );

@@ -1,4 +1,4 @@
-import NotFound from "@/app/not-found";
+import { notFound } from "next/navigation";
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import CheckoutClientForm from "./_components/checkout-client-form";
@@ -34,20 +34,20 @@ const checkoutPage = async ({ params }: CheckoutIdPageProps) => {
           quantity: true,
         }
       },
-      coupon: true, // Include the full coupon object
+      coupon: true, 
     }
   });
 
   if (!order) {
-    return NotFound(); 
+    notFound();
   }
 
-  // Convert product.price from Decimal to number and images to string[]
+  
   const orderWithNumberPrice = {
     ...order,
     buyer: {
       ...order.buyer,
-      name: order.buyer.fullName || "", // Map fullName to name as required by BuyerData
+      name: order.buyer.fullName || "", 
       email: order.buyer.email,
     },
     sku:
@@ -100,6 +100,7 @@ const checkoutPage = async ({ params }: CheckoutIdPageProps) => {
           },
     couponId: typeof order.couponId === "undefined" ? null : order.couponId,
   };
+
 
   return (
     <div>

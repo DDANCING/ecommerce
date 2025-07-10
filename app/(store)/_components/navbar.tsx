@@ -79,14 +79,14 @@ export const Navbar = ({ user }: UserProps) => {
     {
       title: "Wishlist",
       icon: Heart,
-      href: "/wishlist",
-      content: <Link href="/wishlist">Wishlist</Link>,
+      href: "/profile/wishlist",
+      content: <Link href="/profile/wishlist">Wishlist</Link>,
     },
     {
       title: "Perfil",
       icon: User ,
-      href: "/perfil",
-      content: <Link href="/perfil">Perfil</Link>,
+      href: "/profile",
+      content: <Link href="/profile">Perfil</Link>,
     },
   ];
 

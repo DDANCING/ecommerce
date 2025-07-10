@@ -36,15 +36,18 @@ import {
   scaleIn,
   staggerContainer,
 } from "@/lib/animations";
+import WishlistButton from "@/components/ui/WishlistButton";
 
 interface ProductClientProps {
   product: StoreProduct;
   suggestedProducts: StoreProduct[];
+  wishlist: boolean;
 }
 
 export default function ProductClient({
   product,
   suggestedProducts,
+  wishlist
 }: ProductClientProps) {
   const [selectedImage, setSelectedImage] = useState(product.images[0]);
 
@@ -73,11 +76,14 @@ export default function ProductClient({
         </Carousel>
 
         <motion.div {...fadeInUp} className="mt-6 space-y-4">
-          <h1 className="text-2xl font-bold">{product.name}</h1>
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-bold">{product.name}</h1>
+            <WishlistButton productId={product.id} initialInWishlist={wishlist} />
+            </div>
           <p className="text-xl font-semibold">
             {formatter.format(Number(product.price))}
           </p>
-
+          
           <div className="grid grid-cols-1 md:flex gap-2">
             <Button size="lg" className="flex-1">
               ADICIONAR AO CARRINHO
@@ -175,7 +181,11 @@ export default function ProductClient({
                </BreadcrumbPage>
               </BreadcrumbList>
             </Breadcrumb>
+            <div className="flex items-center gap-4">
+              
             <h1 className="text-3xl font-bold">{product.name}</h1>
+            <WishlistButton productId={product.id} initialInWishlist={wishlist} />
+            </div>
             <div className="flex items-center gap-2">
               <p className="text-2xl font-semibold mt-2">
                 {formatter.format(Number(product.price))}
@@ -185,6 +195,7 @@ export default function ProductClient({
                   {formatter.format(Number(product.originalPrice))}
                 </p>
               )}
+              
             </div>
           </div>
 

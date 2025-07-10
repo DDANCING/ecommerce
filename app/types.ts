@@ -1,6 +1,7 @@
 import { Color, Product, Size } from "@prisma/client";
 
 export type SafeProduct = Omit<Product, "price"> & {
+  images?: { id: string; url: string }[];
   price: number;
   color: Color;
   size: Size;

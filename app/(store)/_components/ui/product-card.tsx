@@ -21,9 +21,15 @@ import useCart from "@/hooks/use-cart"
 
 interface ProductCardProps {
   product: StoreProduct
+  size?: number 
+  initialInWishlist?: boolean | null
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+const DEFAULT_CARD_WIDTH = 320 // largura em px (w-80 do tailwind)
+const DEFAULT_IMAGE_WIDTH = 320
+const DEFAULT_IMAGE_HEIGHT = 240
+
+const ProductCard: React.FC<ProductCardProps> = ({ initialInWishlist = false, product, size = 1 }) => {
   const [isAdding, setIsAdding] = useState(false)
   const [isFavorite, setIsFavorite] = useState(false)
   const [isClient, setIsClient] = useState(false)
@@ -33,7 +39,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
   const onAddToCart: MouseEventHandler<HTMLButtonElement> = (event) => {
     event.stopPropagation();
-
     cart.addItem(product);
   }
 
@@ -43,13 +48,19 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   }, [])
 
 
-
-  const handleFavorite = () => {
-    setIsFavorite(!isFavorite)
-  }
-
   const imageUrl = product.images[0]?.url ?? "/placeholder.svg"
   const price = formatter.format(product.price)
+
+  // Calcule dimensões baseadas no size
+  const cardWidth = DEFAULT_CARD_WIDTH * size
+  const imageWidth = DEFAULT_IMAGE_WIDTH * size
+  const imageHeight = DEFAULT_IMAGE_HEIGHT * size
+
+  // estilo inline para a largura do card
+  const cardStyle = {
+    width: `${cardWidth}px`,
+    fontSize: `${size}em`,
+  }
 
   const imageVariants = {
     rest: { scale: 1 },
@@ -62,8 +73,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       whileHover="hover"
       animate="rest"
       variants={containerVariants}
+      style={cardStyle}
       className={cn(
-        "relative w-80 rounded-2xl border border-border/50 bg-card text-card-foreground overflow-hidden",
+        "relative rounded-2xl border border-border/50 bg-card text-card-foreground overflow-hidden",
         "shadow-lg shadow-black/5 cursor-pointer group"
       )}
     >
@@ -92,39 +104,47 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           <Image
             src={imageUrl}
             alt={product.name}
-            width={320}
-            height={240}
-            className="w-full h-54 object-cover"
+            width={imageWidth}
+            height={imageHeight}
+            className="w-full object-cover"
+            style={{
+              height: `${imageHeight}px`,
+              minHeight: `${imageHeight}px`,
+              maxHeight: `${imageHeight}px`,
+            }}
           />
         </motion.div>
 
         <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
 
         <motion.button
-          onClick={handleFavorite}
           variants={favoriteVariants}
-          animate={isFavorite ? "favorite" : "rest"}
+          animate={initialInWishlist ? "favorite" : "rest"}
           className={cn(
             "absolute top-4 right-4 p-2 rounded-full backdrop-blur-sm border border-white/20",
-            isFavorite
-              ? "bg-rose-500 text-muted-foreground"
+            initialInWishlist
+              ? "bg-muted-foreground text-muted-foreground"
               : "bg-muted/20 text-muted hover:bg-muted/30"
           )}
         >
           <Heart
-            className={cn("w-4 h-4", isFavorite && "fill-current")}
+            className={cn("w-4 h-4", initialInWishlist && " fill-red-500")}
+            style={{
+              width: `${16 * size}px`,
+              height: `${16 * size}px`,
+            }}
           />
         </motion.button>
       </div>
 
       {/* Conteúdo principal */}
       <div className="p-6 space-y-3">
-        <h3 className="text-xl font-bold">{product.name}</h3>
+        <h3 className="text-xl font-bold" style={{ fontSize: `${1.25 * size}rem` }}>{product.name}</h3>
 
         <div className="flex items-center gap-2">
-          <span className="text-2xl font-bold text-primary">{price}</span>
+          <span className="text-2xl font-bold text-primary" style={{ fontSize: `${1.5 * size}rem` }}>{price}</span>
           {product.originalPrice && (
-            <span className="text-lg line-through text-muted-foreground">
+            <span className="text-lg line-through text-muted-foreground" style={{ fontSize: `${1.125 * size}rem` }}>
               {formatter.format(product.originalPrice)}
             </span>
           )}
@@ -141,10 +161,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                     ? "text-yellow-400 fill-current"
                     : "text-muted-foreground"
                 )}
+                style={{
+                  width: `${16 * size}px`,
+                  height: `${16 * size}px`,
+                }}
               />
             ))}
           </div>
-          <span className="text-sm text-muted-foreground">
+          <span className="text-sm text-muted-foreground" style={{ fontSize: `${0.875 * size}rem` }}>
             {product.rating ?? 0} ({product.reviewCount ?? 0})
           </span>
         </div>
@@ -157,17 +181,21 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       >
         <div className="p-6">
           <motion.div variants={contentVariants}>
-            <h4 className="font-semibold">Cor</h4>
+            <h4 className="font-semibold" style={{ fontSize: `${1.1 * size}rem` }}>Cor</h4>
             <div
               className="h-6 w-6 rounded-full border"
-              style={{ backgroundColor: product.color.value }}
+              style={{
+                backgroundColor: product.color.value,
+                width: `${24 * size}px`,
+                height: `${24 * size}px`,
+              }}
             />
-            <p className="text-sm text-muted-foreground mb-4">
+            <p className="text-sm text-muted-foreground mb-4" style={{ fontSize: `${0.875 * size}rem` }}>
               {product.color.name}
             </p>
 
-            <h4 className="font-semibold">Detalhes</h4>
-            <p className="text-sm text-muted-foreground mb-4">
+            <h4 className="font-semibold" style={{ fontSize: `${1.1 * size}rem` }}>Detalhes</h4>
+            <p className="text-sm text-muted-foreground mb-4" style={{ fontSize: `${0.875 * size}rem` }}>
               {product.description ?? "Sem descrição disponível."}
             </p>
           </motion.div>
@@ -182,8 +210,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 "bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary",
                 "shadow-lg shadow-primary/25 disabled:opacity-60"
               )}
+              style={{ height: `${48 * size}px`, fontSize: `${1 * size}rem` }}
             >
-              <ShoppingCart className="w-4 h-4 mr-2" />
+              <ShoppingCart className="w-4 h-4 mr-2" style={{
+                width: `${16 * size}px`,
+                height: `${16 * size}px`,
+              }} />
               {isAdding ? "Adicionado!" : "Adicionar ao Carrinho"}
             </motion.button>
 
@@ -193,6 +225,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 buttonVariants({ variant: "outline" }),
                 "w-full h-10 font-medium text-center block"
               )}
+              style={{ height: `${40 * size}px`, fontSize: `${1 * size}rem` }}
             >
               Ver Detalhes
             </Link>
